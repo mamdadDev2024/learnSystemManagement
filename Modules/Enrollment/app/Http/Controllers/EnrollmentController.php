@@ -1,11 +1,11 @@
 <?php
 
-namespace Modules\User\Http\Controllers;
+namespace Modules\Enrollment\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class EnrollmentController extends Controller
 {
     /**
      * Display a listing of the resource.

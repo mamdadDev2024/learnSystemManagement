@@ -1,17 +1,17 @@
 <?php
 
-namespace {{namespace}};
+namespace Modules\User\Http\Requests;
 
 use App\Contracts\ApiFormRequest;
 
-class {{class}} extends ApiFormRequest
+class LoginApiRequest extends ApiFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return !auth('sanctum')->check();
     }
 
     /**
@@ -22,7 +22,8 @@ class {{class}} extends ApiFormRequest
     public function rules(): array
     {
         return [
-            //
+            'email' => 'email|required|exists:users',
+            'password' => 'string|required|min:6'
         ];
     }
 }

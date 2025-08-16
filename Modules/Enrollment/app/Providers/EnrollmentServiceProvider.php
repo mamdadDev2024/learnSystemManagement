@@ -1,23 +1,20 @@
 <?php
 
-namespace Modules\User\Providers;
+namespace Modules\Enrollment\Providers;
 
-use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
-class UserServiceProvider extends ServiceProvider
+class EnrollmentServiceProvider extends ServiceProvider
 {
     use PathNamespace;
 
-    protected string $name = 'User';
+    protected string $name = 'Enrollment';
 
-    protected string $nameLower = 'user';
+    protected string $nameLower = 'enrollment';
 
     /**
      * Boot the application events.
@@ -30,12 +27,6 @@ class UserServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
-        RateLimiter::for('check-user' , function (Request $request){
-            return app()->isLocal() ? Limit::none() : Limit::perMinute(2)->by($request->ip());
-        });
-        RateLimiter::for('auth' , function (Request $request){
-            return app()->isLocal() ? Limit::none() : Limit::perSecond(30)->by($request->ip());
-        });
     }
 
     /**

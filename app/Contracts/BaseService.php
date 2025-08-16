@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Contracts;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -11,11 +11,11 @@ abstract class BaseService
     protected function execute(callable $callback, string $errorMessage = 'Service error', bool $useTransaction = true): ServiceResponse
     {
         try {
-            if ($useTransaction) {
-                return DB::transaction($callback);
-            }
+            $result = $useTransaction
+                ? DB::transaction($callback)
+                : $callback();
 
-            return $callback();
+            return ServiceResponse::success($result);
 
         } catch (Throwable $e) {
             Log::error($errorMessage, [

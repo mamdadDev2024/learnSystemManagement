@@ -4,42 +4,47 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Str;
+use Symfony\Component\Console\Input\InputArgument;
 
 class ApiRequestMakeCommand extends GeneratorCommand
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * php artisan make:apiRequest ClassName ModuleName
-     *
-     * @var string
-     */
-    protected $signature = 'make:apiRequest {name} {module}';
+    protected $signature = 'make:apiRequest {name : Class name} {module : Module name}';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Make API FormRequest for a specific module';
+    protected $description = 'Make an API FormRequest for a specific module';
+
+    protected $type = 'API Request';
 
     protected function getStub()
     {
-        return __DIR__.'/stubs/ApiRequest.stub';
+        return __DIR__ . '/stubs/ApiRequest.stub';
     }
 
-    public function getDefaultNamespace($rootNamespace)
+    protected function getDefaultNamespace($rootNamespace)
     {
-        $module = $this->argument('module');
+        $module = Str::studly($this->argument('module'));
 
-        return "Modules\\{$module}\\Http\\Requests";
+        return "Modules\\{$module}\\App\\Http\\Requests";
     }
 
     protected function getPath($name)
     {
-        $module = $this->argument('module');
-        $className = Str::afterLast($name, '\\');
+        $module = Str::studly($this->argument('module'));
+        $className = class_basename($name);
 
-        return base_path("Modules/{$module}/Http/Requests/{$className}.php");
+        $directory = base_path("Modules/{$module}/app/Http/Requests");
+
+        if (!is_dir($directory)) {
+            mkdir($directory, 0755, true);
+        }
+
+        return $directory . '/' . $className . '.php';
+    }
+
+    protected function qualifyClass($name)
+    {
+        $name = Str::studly(class_basename($name));
+        $namespace = $this->getDefaultNamespace(trim($this->rootNamespace(), '\\'));
+
+        return $namespace . '\\' . $name;
     }
 }

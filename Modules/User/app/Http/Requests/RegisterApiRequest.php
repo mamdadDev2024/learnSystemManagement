@@ -1,19 +1,19 @@
 <?php
 
-namespace {{namespace}};
+namespace Modules\User\Http\Requests;
 
 use App\Contracts\ApiFormRequest;
+use ApiResponse;
 
-class {{class}} extends ApiFormRequest
+class RegisterApiRequest extends ApiFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return !auth()->check();
     }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -22,7 +22,9 @@ class {{class}} extends ApiFormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'string|required|max:100|min:2',
+            'email' => 'email|required|unique:users',
+            'password' => 'string|required|min:6'
         ];
     }
 }
