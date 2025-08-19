@@ -1,9 +1,10 @@
 <?php
 
 namespace Modules\User\Enums;
+
 use Illuminate\Validation\ValidationException;
 
-enum ContactType :string{
+enum ContactType: string {
     case EMAIL = 'email';
     case PHONE = 'phone';
 
@@ -15,10 +16,8 @@ enum ContactType :string{
             return self::PHONE;
         }
 
-
         throw ValidationException::withMessages([
             'contact' => __('Invalid contact type'),
         ]);
-
     }
 }

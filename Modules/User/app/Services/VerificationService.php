@@ -3,32 +3,25 @@
 namespace Modules\User\Services;
 
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Modules\User\Emails\VerificationCodeEmail;
 use Modules\User\Enums\ContactType;
 use Modules\User\Enums\VerificationActionType;
-use Modules\User\Http\Requests\SendVerificationRequest;
+use App\Contracts\ServiceResponse;
+use Modules\User\Models\User;
 
 class VerificationService
 {
     public function getRetryTime(string $contact, ContactType $contactType, VerificationActionType $action): int
     {
         $cacheValue = Cache::get($this->getCacheKey($contact, $contactType, $action));
-        if ($cacheValue !== null) {
-            return now()->diffInSeconds($cacheValue['expiredAt']);
-        }
-        return 0;
+        return $cacheValue ? now()->diffInSeconds($cacheValue['expiredAt']) : 0;
     }
 
     public function generateCode(ContactType $contactType, string $contact, VerificationActionType $action, ?int $expiresInMinutes = null): int
     {
         $code = rand(100000, 999999);
-
-        if ($expiresInMinutes === null) {
-            $expiresInMinutes = $contactType === ContactType::EMAIL ? 2 : 1;
-        }
-
+        $expiresInMinutes ??= $contactType === ContactType::EMAIL ? 2 : 1;
         $expiresAt = now()->addMinutes($expiresInMinutes);
 
         Cache::put($this->getCacheKey($contact, $contactType, $action), [
@@ -39,66 +32,68 @@ class VerificationService
         return $code;
     }
 
-    public function forgetCode(SendVerificationRequest $request): void
-    {
-        Cache::forget(
-            $this->getCacheKey(
-                $request->input('contact'),
-                $request->contactType,
-                VerificationActionType::from($request->input('action'))
-            )
-        );
-    }
-
-    public function sendCodeAsSMS(SendVerificationRequest $request, int $code): int
+    public function sendVerificationCode(ContactType $contactType, string $contact, VerificationActionType $action): ServiceResponse
     {
         try {
-            // Http::post('' , [
+            $code = $this->generateCode($contactType, $contact, $action);
 
-            // ])->headers([
+            $sent = match ($contactType) {
+                ContactType::EMAIL => $this->sendCodeAsEmail($contact, $code),
+                ContactType::PHONE => $this->sendCodeAsSMS($contact, $code),
+            };
 
-            // ]);
-            return 1;
+            return $sent
+                ? ServiceResponse::success(message: 'Verification code sent successfully')
+                : ServiceResponse::error('Verification code sending failed');
+
         } catch (\Throwable $e) {
-            \Log::error($e->getMessage() . "on line" . $e->getLine());
-            $this->forgetCode($request);
-            return 0;
+            \Log::error("VerificationService sendVerificationCode error: {$e->getMessage()}");
+            return ServiceResponse::error('Verification code sending failed');
         }
     }
 
-    public function sendCodeAsEmail(SendVerificationRequest $request, int $code): int
+    public function verifyCode(ContactType $contactType, string $contact, VerificationActionType $action, int $code): ServiceResponse
+    {
+        $cacheKey = $this->getCacheKey($contact, $contactType, $action);
+        $cached = Cache::get($cacheKey);
+
+        if (!$cached) {
+            return ServiceResponse::error('Verification code is expired or does not exist');
+        }
+
+        if ($cached['code'] != $code) {
+            return ServiceResponse::error('Verification code is invalid');
+        }
+
+        Cache::forget($cacheKey);
+        return ServiceResponse::success(message: 'Verification code verified successfully');
+    }
+
+    protected function sendCodeAsSMS(string $contact, int $code): bool
     {
         try {
-            Mail::to($request->input('contact'))->send(new VerificationCodeEmail($code));
-            return 1;
+            $user = User::wherePhone($contact)->first();
+            return true;
         } catch (\Throwable $e) {
-            $this->forgetCode($request);
-            return 0;
+            \Log::error("SMS sending failed: {$e->getMessage()}");
+            return false;
         }
     }
 
-    public function getCacheKey(string $contact, ContactType $contactType, VerificationActionType $action): string
+    protected function sendCodeAsEmail(string $contact, int $code): bool
     {
-        $key = hash('sha256', "{$action->value}:{$contactType->value}:{$contact}");
-        return "verification:{$key}";
+        try {
+            $user = User::whereEmail($contact)->first();
+            Mail::to($contact)->send(new VerificationCodeEmail($code , $user));
+            return true;
+        } catch (\Throwable $e) {
+            \Log::error("Email sending failed: {$e->getMessage()}");
+            return false;
+        }
     }
 
-    public function verifyCode(ContactType $contactType, string $contact, VerificationActionType $action, int $code): bool
-{
-    $cacheKey = $this->getCacheKey($contact, $contactType, $action);
-    $cached = Cache::get($cacheKey);
-
-    if (!$cached) {
-        return false;
+    protected function getCacheKey(string $contact, ContactType $contactType, VerificationActionType $action): string
+    {
+        return 'verification:' . hash('sha256', "{$action->value}:{$contactType->value}:{$contact}");
     }
-
-    if ($cached['code'] != $code) {
-        return false;
-    }
-
-    Cache::forget($cacheKey);
-
-    return true;
-}
-
 }

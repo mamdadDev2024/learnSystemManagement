@@ -2,82 +2,54 @@
 
 namespace Modules\User\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Contracts\ApiFormRequest;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Enum;
 use Modules\User\Enums\ContactType;
 use Modules\User\Enums\VerificationActionType;
+use Modules\User\Services\VerificationService;
 
-class ReceiveCodeVerificationRequest extends FormRequest
+class ReceiveCodeVerificationRequest extends ApiFormRequest
 {
-    public ?ContactType $contactType = null;
-    public ?VerificationActionType $actionType = null;
+    public $contactType;
+    public $actionType;
 
-    /**
-     * Prepare the data for validation.
-     */
-    protected function prepareForValidation(): void
+    public function authorize(): bool
     {
-        $this->contactType = ContactType::detectContactType($this->input('contact') ?? '');
-        $this->actionType = VerificationActionType::tryFrom($this->input('action') ?? '');
+        return !auth('sanctum')->check();
     }
 
-    /**
-     * Configure the validator instance.
-     */
+    public function prepareForValidation(): void
+    {
+        $contact = $this->input('contact') ?? '';
+        $action  = $this->input('action') ?? '';
+
+        $this->contactType = ContactType::detectContactType($contact);
+
+        $this->actionType = VerificationActionType::tryFrom($action);
+    }
+
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
-            if ($validator->errors()->isNotEmpty()) return;
-
-            $code = $this->input('code');
-            if (!is_numeric($code) || strlen((string)$code) !== 6) {
-                $validator->errors()->add('code', 'The verification code must be a 6-digit number.');
+            if ($validator->errors()->isNotEmpty()) {
+                return;
             }
+
+            $contact = $this->input('contact');
+            $retryTime = (new VerificationService)->getRetryTime(
+                $contact,
+                $this->contactType,
+                $this->actionType
+            );
         });
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     */
     public function rules(): array
     {
-        $contactRules = [];
-
-        try {
-            $contactRules = $this->input('contact') ? $this->getContactValidationRule() : ['prohibited'];
-        } catch (\InvalidArgumentException $e) {
-            $contactRules = ['prohibited'];
-        }
-
         return [
-            'contact' => array_merge(['required', 'string'], $contactRules),
-            'action'  => ['required', 'string', new Enum(VerificationActionType::class)],
-            'code'    => ['required', 'digits:6', 'numeric'],
+            'contact' => ['required', 'string'],
+            'code'    => ['required', 'digits:6'],
+            'action'  => ['required', Rule::enum(VerificationActionType::class)],
         ];
-    }
-
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return true;
-    }
-
-    /**
-     * Get contact-specific validation rules.
-     */
-    protected function getContactValidationRule(): array
-    {
-        if ($this->contactType === ContactType::EMAIL) {
-            return ['email:rfc,dns', 'exists:users,email'];
-        }
-
-        if ($this->contactType === ContactType::PHONE) {
-            return ['phone:mobile', 'exists:users,phone'];
-        }
-
-        throw new \InvalidArgumentException('Invalid contact type.');
     }
 }

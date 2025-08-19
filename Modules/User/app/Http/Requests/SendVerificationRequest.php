@@ -11,8 +11,8 @@ use Modules\User\Services\VerificationService;
 
 class SendVerificationRequest extends FormRequest
 {
-    public ?ContactType $contactType = null;
-    public ?VerificationActionType $actionType = null;
+    public $contactType;
+    public $actionType;
 
     public function prepareForValidation()
     {

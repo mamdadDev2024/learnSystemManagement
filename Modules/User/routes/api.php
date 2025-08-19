@@ -25,6 +25,6 @@ Route::as('auth.')->prefix('auth')->group(function () {
 });
 
 Route::as('user.')->prefix('user')->group(function (){
-    Route::post('delete' , [UserController::class , 'destroy'])->name('delete');
-    Route::patch('update' , [UserController::class , 'update'])->name('update');
+    Route::delete('' , [UserController::class , 'destroy'])->name('delete');
+    Route::put('' , [UserController::class , 'update'])->name('update');
 });

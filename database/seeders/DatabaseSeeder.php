@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
     \Modules\User\Database\Factories\UserFactory::new()->create([
         'name' => 'admin',
         'email' => 'admin@gmail.com',
+        'phone' => (int) '+989903001905',
         'password' => Hash::make('password')
     ]);
 

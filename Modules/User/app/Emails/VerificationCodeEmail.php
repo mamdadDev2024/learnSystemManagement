@@ -8,6 +8,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
+use Modules\User\Models\User;
 
 class VerificationCodeEmail extends Mailable
 {
@@ -16,7 +17,7 @@ class VerificationCodeEmail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(public int $code) {}
+    public function __construct(public int $code , public User $user) {}
 
     public function envelope(): Envelope
     {
@@ -28,9 +29,10 @@ class VerificationCodeEmail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown:'auth::mails.verification',
+            markdown:'user::mails.verification',
             with:[
-                'code' => $this->code
+                'code' => $this->code,
+                'user' => $this->user
             ]
         );
     }

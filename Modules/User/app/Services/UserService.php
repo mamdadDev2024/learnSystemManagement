@@ -17,15 +17,13 @@ class UserService extends BaseService
     public function delete(User $user) {
         return $this->execute(function () use ($user){
             $this->deleteAction->handle($user);
-        } , 'delete user failed');
+        } , 'user delete operation failed');
     }
 
     public function update(User $user , array $data)
     {
         return $this->execute(function () use ($user , $data){
-            $newUser = $this->UpdateAction->handle($user , $data);
-            if (!is_null($newUser))
-                event(new )
-        });
+            return $this->UpdateAction->handle($user , $data);
+        } , 'user update operation failed');
     }
 }
