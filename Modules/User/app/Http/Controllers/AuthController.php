@@ -7,6 +7,7 @@ use Modules\User\Services\AuthService;
 use App\Contracts\ApiResponse;
 use Modules\User\Http\Requests\LoginApiRequest;
 use Modules\User\Http\Requests\RegisterApiRequest;
+use Modules\User\Http\Requests\SendVerificationRequest;
 
 class AuthController extends Controller
 {

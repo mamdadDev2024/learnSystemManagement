@@ -3,7 +3,9 @@
 use App\Contracts\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Modules\User\Http\Controllers\VerificationController;
 use Modules\User\Http\Controllers\AuthController;
+use Modules\User\Http\Controllers\UserController;
 
 Route::get('/user', function (Request $request) {
     return ApiResponse::success($request->user());
@@ -11,11 +13,18 @@ Route::get('/user', function (Request $request) {
 
 Route::as('auth.')->prefix('auth')->group(function () {
     Route::middleware(['guest:sanctum', 'throttle:auth'])->group(function () {
-        Route::post('login', [AuthController::class, 'login'])->name('login');
-        Route::post('register', [AuthController::class, 'register'])->name('register');
+        Route::post('login',                    [AuthController::class,                         'login'])->name('login');
+        Route::post('register',                 [AuthController::class,                      'register'])->name('register');
+        Route::post('send-verification-code',   [VerificationController::class,  'sendVerificationCode'])->name('send.code');
+        Route::post('verify-code',             [VerificationController::class,                'verifyCode'])->name('verify');
     });
 
     Route::post('logout', [AuthController::class, 'logout'])
         ->middleware(['auth:sanctum'])
         ->name('logout');
+});
+
+Route::as('user.')->prefix('user')->group(function (){
+    Route::post('delete' , [UserController::class , 'destroy'])->name('delete');
+    Route::patch('update' , [UserController::class , 'update'])->name('update');
 });

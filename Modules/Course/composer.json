@@ -1,0 +1,30 @@
+{
+    "name": "nwidart/course",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Course\\": "app/",
+            "Modules\\Course\\Database\\Factories\\": "database/factories/",
+            "Modules\\Course\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Course\\Tests\\": "tests/"
+        }
+    }
+}
