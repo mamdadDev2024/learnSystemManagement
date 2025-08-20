@@ -8,13 +8,15 @@ use Illuminate\Validation\ValidationException;
 use Modules\User\Actions\LoginAction;
 use Modules\User\Actions\LogoutAction;
 use Modules\User\Actions\RegisterAction;
+use Modules\User\Actions\resetPasswordAction;
 
 class AuthService extends BaseService
 {
     public function __construct(
         private RegisterAction $registerAction,
         private LoginAction $loginAction,
-        private LogoutAction $logoutAction
+        private LogoutAction $logoutAction,
+        private resetPasswordAction $resetPasswordAction
     ) {}
 
     public function login(array $credentials): ServiceResponse
@@ -59,5 +61,15 @@ class AuthService extends BaseService
                 'message' => 'Logged out successfully.'
             ];
         }, 'Logout service error', false);
+    }
+
+    public function resetPassword(array $data): ServiceResponse
+    {
+        return $this->execute(function () use ($data){
+            $this->resetPasswordAction->handle($data);
+            return [
+                'message' => 'password reset successful'
+            ];
+        } , 'reset password failed!');
     }
 }

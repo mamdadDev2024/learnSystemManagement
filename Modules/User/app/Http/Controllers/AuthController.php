@@ -7,7 +7,9 @@ use Modules\User\Services\AuthService;
 use App\Contracts\ApiResponse;
 use Modules\User\Http\Requests\LoginApiRequest;
 use Modules\User\Http\Requests\RegisterApiRequest;
+use Modules\User\Http\Requests\ResetPasswordRequest;
 use Modules\User\Http\Requests\SendVerificationRequest;
+use Modules\User\Events\UserRegistered;
 
 class AuthController extends Controller
 {
@@ -17,11 +19,9 @@ class AuthController extends Controller
     {
         $result = $this->service->login($request->validated());
 
-        if ($result->status) {
-            return ApiResponse::success($result->data, 'Login successful');
-        }
-
-        return ApiResponse::error($result->message ?? 'Login failed', $result->data, 401);
+        return $result->status
+            ? ApiResponse::success($result->data, 'Login successful', 200)
+            : ApiResponse::error($result->message ?? 'Login failed', $result->data, 401);
     }
 
     public function register(RegisterApiRequest $request)
@@ -29,31 +29,37 @@ class AuthController extends Controller
         $result = $this->service->register($request->validated());
 
         if ($result->status) {
+            event(new UserRegistered($result->data));
             return ApiResponse::success($result->data, 'User registered successfully', 201);
         }
 
-        return ApiResponse::error($result->message ?? 'Registration failed', $result->data);
+        return ApiResponse::error($result->message ?? 'Registration failed', $result->data, 422);
     }
 
     public function logout()
     {
         $result = $this->service->logout();
 
-        if ($result->status) {
-            return ApiResponse::success(null, 'Logged out successfully');
-        }
-
-        return ApiResponse::error($result->message ?? 'Logout failed');
+        return $result->status
+            ? ApiResponse::success(null, 'Logged out successfully', 200)
+            : ApiResponse::error($result->message ?? 'Logout failed', null, 400);
     }
 
     public function me()
     {
-        $user = auth()->user();
+        $user = auth('sanctum')->user();
 
-        if ($user) {
-            return ApiResponse::success($user, 'User profile fetched successfully');
-        }
+        return $user
+            ? ApiResponse::success($user, 'User profile fetched successfully', 200)
+            : ApiResponse::error('User not authenticated', null, 401);
+    }
 
-        return ApiResponse::error('User not authenticated', null, 401);
+    public function resetPassword(ResetPasswordRequest $request)
+    {
+        $result = $this->service->resetPassword($request->validated());
+
+        return $result->status
+            ? ApiResponse::success(null, 'Reset Password successfully', 200)
+            : ApiResponse::error('Reset Password failed!', null, 422);
     }
 }
