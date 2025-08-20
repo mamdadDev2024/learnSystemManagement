@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Modules\User\Models\User;
 
 return new class extends Migration
 {
@@ -13,7 +14,11 @@ return new class extends Migration
     {
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
-            
+            $table->string('title');
+            $table->string('slug')->unique();
+            $table->text('description');
+            $table->bigInteger('price');
+            $table->foreignIdFor(User::class)->constrained('users')->cascadeOnDelete();
             $table->timestamps();
         });
     }
