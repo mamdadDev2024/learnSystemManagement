@@ -15,12 +15,14 @@ return new class extends Migration
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('slug')->unique();
-            $table->text('description');
-            $table->bigInteger('price');
+            $table->string('slug')->unique()->index();
+            $table->text('description')->nullable();
+            $table->unsignedBigInteger('price')->default(0);
+            $table->boolean('published')->default(false);
             $table->foreignIdFor(User::class)->constrained('users')->cascadeOnDelete();
             $table->timestamps();
         });
+
     }
 
     /**

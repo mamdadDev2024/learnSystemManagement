@@ -21,7 +21,15 @@ class Course extends Model
         'slug',
         'description',
         'price',
+        'published'
     ];
+
+    protected function casts()
+    {
+        return [
+            'published' => 'boolean'
+        ];
+    }
 
     public function enrollments()
     {

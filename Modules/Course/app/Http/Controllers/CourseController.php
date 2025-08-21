@@ -4,6 +4,7 @@ namespace Modules\Course\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Modules\Course\Models\Course;
 
 class CourseController extends Controller
 {
@@ -12,7 +13,18 @@ class CourseController extends Controller
      */
     public function index()
     {
-        return view('course::index');
+        $courses = Course::with([
+            'owner',
+        ])->withCount([
+            'likes',
+            'comments',
+            'views',
+            'enrollments'
+        ])->paginate(10);
+
+        return view('course::index' , [
+            'courses' => $courses
+        ]);
     }
 
     /**
@@ -31,7 +43,7 @@ class CourseController extends Controller
     /**
      * Show the specified resource.
      */
-    public function show($id)
+    public function show(Course $course)
     {
         return view('course::show');
     }
