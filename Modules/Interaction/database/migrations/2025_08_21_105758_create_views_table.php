@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Modules\User\Models\User;
 
 return new class extends Migration
 {
@@ -13,7 +14,9 @@ return new class extends Migration
     {
         Schema::create('views', function (Blueprint $table) {
             $table->id();
-            
+            $table->foreignIdFor(User::class)->constrained('users')->cascadeOnDelete();
+            $table->ipAddress();
+            $table->morphs('viewable');
             $table->timestamps();
         });
     }

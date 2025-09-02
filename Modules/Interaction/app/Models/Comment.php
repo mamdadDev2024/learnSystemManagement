@@ -13,8 +13,16 @@ class Comment extends Model
     /**
      * The attributes that are mass assignable.
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'text',
+        'commentable_id',
+        'commentable_type'
+    ];
 
+    public function commentable()
+    {
+        return $this->morphEagerTo();
+    }
     // protected static function newFactory(): CommentFactory
     // {
     //     // return CommentFactory::new();
