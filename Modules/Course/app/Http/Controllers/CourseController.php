@@ -9,10 +9,11 @@ use Modules\Course\App\Http\Requests\StoreCourseRequest;
 use Modules\Course\App\Http\Requests\UpdateCourseRequest;
 use Modules\Course\Models\Course;
 use Modules\Course\Services\CourseService;
+use Modules\Interaction\Services\InteractService;
 
 class CourseController extends Controller
 {
-    public function __construct(private CourseService $service){}
+    public function __construct(private CourseService $service , private InteractService $interactService){}
 
     /**
      * Display a listing of the resource.
@@ -44,6 +45,7 @@ class CourseController extends Controller
     {
         $result = $this->service->get($course);
 
+        $this->interactService->recordView($course);
         return $result->status
             ? ApiResponse::success($result->data , $result->message)
             : ApiResponse::error($result->message);

@@ -95,4 +95,16 @@ class CourseService extends BaseService
             return $course;
         });
     }
+
+    public function publish(Course $course): Course
+    {
+        $course->update(['published' => true]);
+        return $course;
+    }
+
+    public function unpublish(Course $course): Course
+    {
+        $course->update(['published' => false]);
+        return $course;
+    }
 }

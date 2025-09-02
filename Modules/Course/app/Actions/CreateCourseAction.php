@@ -8,7 +8,8 @@ class CreateCourseAction
 {
     public function handle(array $data)
     {
-        $course = Course::create($data);
+        return auth('sanctum')->user()->courses()->create($data);
+
     }
 
 }

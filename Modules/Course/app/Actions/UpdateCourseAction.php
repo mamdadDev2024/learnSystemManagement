@@ -2,10 +2,16 @@
 
 namespace Modules\Course\Actions;
 
+use Exception;
 use Modules\Course\Models\Course;
 
 class UpdateCourseAction
 {
-    public function handle(Course $course , array $data) {}
+    public function handle(Course $course , array $data)
+    {
+        if ($course->isDirty($data))
+            if ($course->update(...$data))
+                throw new Exception('error on updating course!');
+    }
 
 }

@@ -22,7 +22,11 @@ class StoreCourseRequest extends ApiFormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => ['required', 'string', 'max:255'],
+            'slug' => ['required', 'string', 'unique:courses,slug'],
+            'description' => ['required'],
+            'price' => ['required', 'integer', 'min:0'],
+            'published' => ['boolean'],
         ];
     }
 }

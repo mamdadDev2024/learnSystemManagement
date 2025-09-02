@@ -19,6 +19,11 @@ class View extends Model
         'viewable_type'
     ];
 
+    public function viewable()
+    {
+        return $this->morphTo();
+    }
+
     // protected static function newFactory(): ViewFactory
     // {
     //     // return ViewFactory::new();

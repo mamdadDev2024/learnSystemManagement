@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('views', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class)->constrained('users')->cascadeOnDelete();
+            $table->foreignIdFor(User::class)->nullable()->constrained('users')->cascadeOnDelete();
             $table->ipAddress();
             $table->morphs('viewable');
             $table->timestamps();
