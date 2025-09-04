@@ -3,7 +3,7 @@
 namespace Modules\Course\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-
+use Illuminate\Support\Str;
 class CourseFactory extends Factory
 {
     /**
@@ -16,7 +16,14 @@ class CourseFactory extends Factory
      */
     public function definition(): array
     {
-        return [];
+        $title = fake()->sentence();
+        return [
+            'title' => $title,
+            'slug' => Str::slug($title),
+            'price' => rand(1000 , 10000),
+            'description' => fake()->text(400),
+            'published' => (bool) rand(0,1)
+        ];
     }
 }
 

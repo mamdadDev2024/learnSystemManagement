@@ -24,7 +24,7 @@ class CourseController extends Controller
 
         return $result->status
             ? ApiResponse::success($result->data , $result->message)
-            : ApiResponse::success($result->message);
+            : ApiResponse::error($result->message);
     }
 
     /**

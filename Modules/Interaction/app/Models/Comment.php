@@ -21,7 +21,7 @@ class Comment extends Model
 
     public function commentable()
     {
-        return $this->morphEagerTo();
+        return $this->morphTo();
     }
     // protected static function newFactory(): CommentFactory
     // {
