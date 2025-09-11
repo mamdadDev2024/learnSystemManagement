@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Course\App\Http\Requests;
+namespace Modules\Course\Http\Requests;
 
 use App\Contracts\ApiFormRequest;
 
@@ -22,11 +22,10 @@ class UpdateCourseRequest extends ApiFormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string', 'max:255'],
-            'slug' => ['required', 'string', 'unique:courses,slug'],
-            'description' => ['required'],
-            'price' => ['required', 'integer', 'min:0'],
-            'published' => ['boolean'],
+            'title' => "required|string|max:255",
+            'description' => "required|string|min:10",
+            'price' => "required|integer|min:0",
+            'published' => "boolean"
         ];
     }
 }

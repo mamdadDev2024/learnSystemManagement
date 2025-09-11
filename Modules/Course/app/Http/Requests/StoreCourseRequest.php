@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Course\App\Http\Requests;
+namespace Modules\Course\Http\Requests;
 
 use App\Contracts\ApiFormRequest;
 

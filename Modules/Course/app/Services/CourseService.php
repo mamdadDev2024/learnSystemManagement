@@ -47,10 +47,6 @@ class CourseService extends BaseService
         return $this->execute(function () use ($course) {
             $result = $this->deleteAction->handle($course);
 
-            if (!$result) {
-                throw new Exception("Failed to delete course", 500);
-            }
-
             return $result;
         });
     }

@@ -23,7 +23,7 @@ class ApiRequestMakeCommand extends GeneratorCommand
     {
         $module = Str::studly($this->argument('module'));
 
-        return "Modules\\{$module}\\App\\Http\\Requests";
+        return "Modules\\{$module}\\Http\\Requests";
     }
 
     protected function getPath($name)

@@ -9,7 +9,14 @@ class DeleteCourseAction
 {
     public function handle(Course $course)
     {
-        if ($course->delete())
-            throw new Exception('error on deleting course!');
+            if ($course->enrollments()->where('status', 'active')->exists()) {
+                throw new Exception('Cannot delete course with active enrollments!');
+            }
+            
+            if (!$course->delete()) {
+                throw new Exception('Failed to delete course!');
+            }
+                        
+            return true;
     }
 }

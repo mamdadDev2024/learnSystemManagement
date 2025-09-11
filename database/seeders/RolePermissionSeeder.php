@@ -17,7 +17,7 @@ class RolePermissionSeeder extends Seeder
         $admin = User::whereName("admin")->first();
         $roles = ["admin", "user", "teacher"];
         foreach ($roles as $roleName) {
-            $role = Role::whereName($roleName)->first();
+            $role = Role::create(['name'=>$roleName , 'guard_name' => 'api'])->first();
             $admin->assignRole($role);
         }
     }
