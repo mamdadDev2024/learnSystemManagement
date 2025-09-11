@@ -20,17 +20,18 @@ class Course extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = [
-        'title',
-        'slug',
-        'description',
-        'price',
-        'published'
+        "title",
+        "slug",
+        "description",
+        "price",
+        "user_id",
+        "published",
     ];
 
     protected function casts()
     {
         return [
-            'published' => 'boolean'
+            "published" => "boolean",
         ];
     }
 
@@ -41,27 +42,27 @@ class Course extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'enrollments');
+        return $this->belongsToMany(User::class, "enrollments");
     }
 
     public function likes()
     {
-        return $this->morphMany(Like::class , 'likable');
+        return $this->morphMany(Like::class, "likable");
     }
 
     public function comments()
     {
-        return $this->morphMany(Comment::class , 'commentable');
+        return $this->morphMany(Comment::class, "commentable");
     }
 
     public function views()
     {
-        return $this->morphMany(View::class , 'viewable');
+        return $this->morphMany(View::class, "viewable");
     }
 
     public function owner()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, "user_id");
     }
 
     // protected static function newFactory(): CourseFactory

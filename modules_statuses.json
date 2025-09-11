@@ -2,5 +2,6 @@
     "User": true,
     "Enrollment": true,
     "Course": true,
-    "Interaction": true
+    "Interaction": true,
+    "Authorization": true
 }

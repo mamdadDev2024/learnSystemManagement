@@ -13,5 +13,14 @@ class CourseDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $users = User::all();
+
+        foreach ($users as $user) {
+            CourseFactory::new()
+                ->count(rand(1, 5))
+                ->create([
+                    "user_id" => $user->id,
+                ]);
+        }
     }
 }

@@ -13,11 +13,7 @@ class View extends Model
     /**
      * The attributes that are mass assignable.
      */
-    protected $fillable = [
-        'ip_address',
-        'viewable_id',
-        'viewable_type'
-    ];
+    protected $fillable = ["ip_address", "viewable_id", "viewable_type"];
 
     public function viewable()
     {

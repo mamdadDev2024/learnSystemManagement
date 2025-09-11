@@ -4,27 +4,28 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
-use Modules\Course\Database\Factories\CourseFactory;
+use Modules\Course\Database\Seeders\CourseDatabaseSeeder;
+use Modules\User\Database\Seeders\UserDatabaseSeeder;
 
 class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
+
     /**
      * Seed the application's database.
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
         $user = \Modules\User\Database\Factories\UserFactory::new()->create([
-            'name' => 'admin',
-            'email' => 'admin@gmail.com',
-            'phone' => '+989903001905',
-            'password' => Hash::make('password')
+            "name" => "admin",
+            "email" => "admin@gmail.com",
+            "phone" => "+989903001905",
         ]);
-        CourseFactory::new([
-            'user_id' => $user->id
-        ])->count(10)->create();
+        $this->call([
+            UserDatabaseSeeder::class,
+            CourseDatabaseSeeder::class,
+            RolePermissionSeeder::class,
+            // Add other seeders here
+        ]);
     }
 }

@@ -21,7 +21,7 @@ class CourseService extends BaseService
         private CreateCourseAction $createAction,
         private UpdateCourseAction $updateAction,
         private DeleteCourseAction $deleteAction,
-        private ShowCourseAction $showAction
+        private ShowCourseAction $showAction,
     ) {}
 
     public function index()
@@ -30,7 +30,7 @@ class CourseService extends BaseService
             $courses = $this->indexAction->handle();
 
             if ($courses->count() <= 0) {
-                throw new Exception('No courses found', 404);
+                throw new Exception("No courses found", 404);
             }
 
             return $courses;
@@ -39,9 +39,7 @@ class CourseService extends BaseService
 
     public function get(Course $course)
     {
-        return $this->execute(function () use ($course) {
-            return $this->showAction->handle($course);
-        });
+        return $this->execute(fn() => $this->showAction->handle($course));
     }
 
     public function delete(Course $course)
@@ -50,7 +48,7 @@ class CourseService extends BaseService
             $result = $this->deleteAction->handle($course);
 
             if (!$result) {
-                throw new Exception('Failed to delete course', 500);
+                throw new Exception("Failed to delete course", 500);
             }
 
             return $result;
@@ -63,7 +61,7 @@ class CourseService extends BaseService
             $updatedCourse = $this->updateAction->handle($course, $data);
 
             if (!$updatedCourse) {
-                throw new Exception('Failed to update course', 500);
+                throw new Exception("Failed to update course", 500);
             }
 
             return $updatedCourse;
@@ -76,7 +74,7 @@ class CourseService extends BaseService
             $course = $this->createAction->handle($data);
 
             if (!$course) {
-                throw new Exception('Failed to create course', 500);
+                throw new Exception("Failed to create course", 500);
             }
 
             return $course;
@@ -89,7 +87,10 @@ class CourseService extends BaseService
             $course = Course::find($id);
 
             if (!$course) {
-                throw new ModelNotFoundException("Course with ID {$id} not found", 404);
+                throw new ModelNotFoundException(
+                    "Course with ID {$id} not found",
+                    404,
+                );
             }
 
             return $course;
@@ -98,13 +99,13 @@ class CourseService extends BaseService
 
     public function publish(Course $course): Course
     {
-        $course->update(['published' => true]);
+        $course->update(["published" => true]);
         return $course;
     }
 
     public function unpublish(Course $course): Course
     {
-        $course->update(['published' => false]);
+        $course->update(["published" => false]);
         return $course;
     }
 }

@@ -5,19 +5,21 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Modules\User\Models\User;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('comments', function (Blueprint $table) {
+        Schema::create("comments", function (Blueprint $table) {
             $table->id();
             $table->ipAddress();
-            $table->morphs('likable');
-            $table->text('body');
-            $table->foreignIdFor(User::class)->constrained('users')->cascadeOnDelete();
+            $table->morphs("commentable");
+            $table->text("body");
+            $table
+                ->foreignIdFor(User::class)
+                ->constrained("users")
+                ->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('comments');
+        Schema::dropIfExists("comments");
     }
 };

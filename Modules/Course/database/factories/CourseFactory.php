@@ -4,6 +4,8 @@ namespace Modules\Course\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
+use Modules\User\Database\Factories\UserFactory;
+use Modules\User\Models\User;
 class CourseFactory extends Factory
 {
     /**
@@ -16,14 +18,13 @@ class CourseFactory extends Factory
      */
     public function definition(): array
     {
-        $title = fake()->sentence();
         return [
-            'title' => $title,
-            'slug' => Str::slug($title),
-            'price' => rand(1000 , 10000),
-            'description' => fake()->text(400),
-            'published' => (bool) rand(0,1)
+            "title" => $this->faker->sentence(4),
+            "slug" => $this->faker->slug(),
+            "description" => $this->faker->paragraph(),
+            "price" => $this->faker->randomFloat(2, 0, 1000),
+            "published" => $this->faker->boolean(80), // 80% chance of being published
+            "user_id" => UserFactory::class, // or User::inRandomOrder()->first()->id
         ];
     }
 }
-

@@ -13,11 +13,7 @@ class Comment extends Model
     /**
      * The attributes that are mass assignable.
      */
-    protected $fillable = [
-        'text',
-        'commentable_id',
-        'commentable_type'
-    ];
+    protected $fillable = ["text", "commentable_id", "commentable_type"];
 
     public function commentable()
     {

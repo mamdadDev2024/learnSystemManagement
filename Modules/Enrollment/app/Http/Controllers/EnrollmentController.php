@@ -4,17 +4,17 @@ namespace Modules\Enrollment\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Modules\Enrollment\Services\EnrollmentService;
 
 class EnrollmentController extends Controller
 {
+    public function __construct(private EnrollmentService $service){}
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
-
-        return response()->json([]);
+        return $this->service->
     }
 
     /**

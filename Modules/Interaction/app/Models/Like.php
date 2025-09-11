@@ -13,11 +13,12 @@ class Like extends Model
     /**
      * The attributes that are mass assignable.
      */
-    protected $fillable = [
-        'ip_address',
-        'likable_id',
-        'likable_type'
-    ];
+    protected $fillable = ["ip_address", "likable_id", "likable_type"];
+
+    public function likable()
+    {
+        return $this->morphTo();
+    }
 
     // protected static function newFactory(): LikeFactory
     // {

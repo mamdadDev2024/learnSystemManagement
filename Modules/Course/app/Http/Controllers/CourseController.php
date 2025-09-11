@@ -13,7 +13,10 @@ use Modules\Interaction\Services\InteractService;
 
 class CourseController extends Controller
 {
-    public function __construct(private CourseService $service , private InteractService $interactService){}
+    public function __construct(
+        private CourseService $service,
+        private InteractService $interactService,
+    ) {}
 
     /**
      * Display a listing of the resource.
@@ -23,8 +26,8 @@ class CourseController extends Controller
         $result = $this->service->index();
 
         return $result->status
-            ? ApiResponse::success($result->data , $result->message)
-            : ApiResponse::error($result->message);
+            ? ApiResponse::success($result->data, $result->message)
+            : ApiResponse::error($result->data);
     }
 
     /**
@@ -34,7 +37,7 @@ class CourseController extends Controller
     {
         $result = $this->service->create($request->validated());
         return $result->status
-            ? ApiResponse::success($result->data , $result->message)
+            ? ApiResponse::success($result->data, $result->message)
             : ApiResponse::error($result->message);
     }
 
@@ -47,30 +50,29 @@ class CourseController extends Controller
 
         $this->interactService->recordView($course);
         return $result->status
-            ? ApiResponse::success($result->data , $result->message)
+            ? ApiResponse::success($result->data, $result->message)
             : ApiResponse::error($result->message);
-
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCourseRequest $request, Course $course) {
-
-        $result = $this->service->update($course , $request->validated());
+    public function update(UpdateCourseRequest $request, Course $course)
+    {
+        $result = $this->service->update($course, $request->validated());
         return $result->status
-            ? ApiResponse::success($result->data , $result->message)
+            ? ApiResponse::success($result->data, $result->message)
             : ApiResponse::error($result->message);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Course $course) {
-
+    public function destroy(Course $course)
+    {
         $result = $this->service->delete($course);
         return $result->status
-            ? ApiResponse::success($result->data , $result->message)
+            ? ApiResponse::success($result->data, $result->message)
             : ApiResponse::error($result->message);
     }
 }
