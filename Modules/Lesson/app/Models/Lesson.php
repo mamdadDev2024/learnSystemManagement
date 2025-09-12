@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 use Modules\Course\Models\Course;
 use Modules\Interaction\Models\Comment;
 use Modules\Interaction\Models\Like;
@@ -93,6 +94,37 @@ class Lesson extends Model
     public function scopeOrdered($query, $direction = 'asc')
     {
         return $query->orderBy('order', $direction);
+    }
+
+    public function updateProgress($percentage)
+    {
+        LessonProgress::updateOrCreate(
+            [
+                'user_id' => auth()->id(),
+                'lesson_id' => $this->id
+            ],
+            [
+                'progress_percentage' => max(0, min(100, $percentage)),
+                'last_accessed_at' => now(),
+                'started_at' => DB::raw('COALESCE(started_at, NOW())')
+            ]
+        );
+    }
+
+    public function markAsCompleted()
+    {
+        LessonProgress::updateOrCreate(
+            [
+                'user_id' => auth()->id(),
+                'lesson_id' => $this->id
+            ],
+            [
+                'is_completed' => true,
+                'progress_percentage' => 100,
+                'completed_at' => now(),
+                'last_accessed_at' => now()
+            ]
+        );
     }
 
     /**

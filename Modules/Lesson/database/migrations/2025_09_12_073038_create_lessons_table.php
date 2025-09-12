@@ -28,7 +28,8 @@ return new class extends Migration
             $table->timestamps();
             $table->index(['course_id', 'order']);
             $table->index(['course_id', 'is_published']);
-            $table->unique(['course_id' , 'order']);
+            $table->index(['slug']);
+            
         });
     }
 

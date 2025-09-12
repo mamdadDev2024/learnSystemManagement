@@ -8,6 +8,7 @@ use Modules\Enrollment\Models\Enrollment;
 use Modules\Interaction\Models\Comment;
 use Modules\Interaction\Models\Like;
 use Modules\Interaction\Models\View;
+use Modules\Lesson\Models\Lesson;
 use Modules\User\Models\User;
 
 // use Modules\Course\Database\Factories\CourseFactory;
@@ -35,12 +36,29 @@ class Course extends Model
         ];
     }
 
+    public function getCourseProgressAttribute()
+    {
+        $totalLessons = $this->course->lessons()->count();
+        $completedLessons = $this->course->lessons()
+            ->whereHas('progress', function($query) {
+                $query->where('user_id', auth()->id())
+                    ->where('is_completed', true);
+            })->count();
+        
+        return $totalLessons > 0 ? round(($completedLessons / $totalLessons) * 100) : 0;
+    }
+
     public function enrollments()
     {
         return $this->hasMany(Enrollment::class);
     }
 
-    public function users()
+    public function lessons()
+    {
+        return $this->hasMany(Lesson::class);
+    }
+
+    public function students()
     {
         return $this->belongsToMany(User::class, "enrollments");
     }

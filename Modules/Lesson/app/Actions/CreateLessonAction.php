@@ -6,5 +6,8 @@ use Modules\Course\Models\Course;
 
 class CreateLessonAction
 {
-    public function handle(Course $course ,array $data) {}
+    public function handle(Course $course ,array $data)
+    {
+        return $course->lessons()->create(...$data);
+    }
 }

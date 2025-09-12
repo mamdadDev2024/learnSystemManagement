@@ -22,7 +22,10 @@ class StoreLessonRequest extends ApiFormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required'
+            'title' => 'required|string|min:3|max:255|unique:lessons',
+            'description' => 'required|string|min:10',
+            'attachment' => 'nullable|file|mimes:.zip,.rar',
+            'video' => 'nullable|file|mimes:.mp4,.mkv',
         ];
     }
 }

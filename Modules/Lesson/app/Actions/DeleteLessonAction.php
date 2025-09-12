@@ -6,5 +6,9 @@ use Modules\Lesson\Models\Lesson;
 
 class DeleteLessonAction
 {
-    public function handle(Lesson $lesson) {}
+    public function handle(Lesson $lesson)
+    {
+        $lesson->delete();
+        return true;
+    }
 }
