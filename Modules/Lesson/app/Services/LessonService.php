@@ -25,9 +25,9 @@ class LessonService extends BaseService
         return $this->execute(fn () => $this->showAction->handle($lesson));
     }
 
-    public function update(Lesson $lesson)
+    public function update(Lesson $lesson , array $data)
     {
-        return $this->execute(fn () => $this->updateAction->handle($lesson));
+        return $this->execute(fn () => $this->updateAction->handle($lesson , $data));
     }
 
     public function create(Course $course , array $data)

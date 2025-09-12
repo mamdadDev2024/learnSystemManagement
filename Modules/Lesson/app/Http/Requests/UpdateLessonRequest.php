@@ -55,20 +55,6 @@ class UpdateLessonRequest extends ApiFormRequest
     }
 
     /**
-     * Get custom messages for validator errors.
-     */
-    public function messages(): array
-    {
-        return [
-            'title.unique' => 'این عنوان درس قبلاً استفاده شده است.',
-            'slug.unique' => 'این slug قبلاً استفاده شده است.',
-            'attachment.max' => 'حجم فایل ضمیمه نباید بیشتر از 10 مگابایت باشد.',
-            'video.max' => 'حجم ویدیو نباید بیشتر از 50 مگابایت باشد.',
-            'course_id.exists' => 'دوره انتخاب شده معتبر نیست.',
-        ];
-    }
-
-    /**
      * Prepare the data for validation.
      */
     protected function prepareForValidation(): void

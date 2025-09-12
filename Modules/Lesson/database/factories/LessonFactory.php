@@ -24,10 +24,10 @@ class LessonFactory extends Factory
             'duration' => $this->faker->numberBetween(5, 120),
             'is_published' => $this->faker->boolean(80), // 80% chance of being published
             'course_id' => $course->id,
-            'attachment_url' => $this->faker->optional(0.3)->url(), // 30% chance of having attachment
-            'attachment_name' => $this->faker->optional(0.3)->word() . '.pdf',
-            'video_url' => $this->faker->optional(0.7)->url(), // 70% chance of having video
-            'video_name' => $this->faker->optional(0.7)->words(2, true) . '.mp4',
+            'attachment_url' => $this->faker->url(), // 30% chance of having attachment
+            'attachment_name' => $this->faker->word() . '.pdf',
+            'video_url' => $this->faker->url(), // 70% chance of having video
+            'video_name' => $this->faker->words(2, true) . '.mp4',
         ];
     }
 

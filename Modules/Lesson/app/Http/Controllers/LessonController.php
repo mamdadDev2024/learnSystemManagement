@@ -17,9 +17,9 @@ class LessonController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Course $course)
+    public function index(Course $Course)
     {
-        $result = $this->service->index($course);
+        $result = $this->service->index($Course);
         return $result->status
             ? ApiResponse::success($result->data , $result->message)
             : ApiResponse::error($result->message , $result->data);
@@ -28,9 +28,9 @@ class LessonController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreLessonRequest $request, Course $course)
+    public function store(StoreLessonRequest $request, Course $Course)
     {
-        $result = $this->service->create($course , $request->validated());
+        $result = $this->service->create($Course , $request->validated());
         return $result->status
             ? ApiResponse::success($result->data , $result->message)
             : ApiResponse::error($result->message , $result->data);

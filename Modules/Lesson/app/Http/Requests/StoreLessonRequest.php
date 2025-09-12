@@ -24,8 +24,18 @@ class StoreLessonRequest extends ApiFormRequest
         return [
             'title' => 'required|string|min:3|max:255|unique:lessons',
             'description' => 'required|string|min:10',
-            'attachment' => 'nullable|file|mimes:.zip,.rar',
-            'video' => 'nullable|file|mimes:.mp4,.mkv',
+            'attachment' => [
+                'nullable',
+                'file',
+                'mimes:zip,rar,pdf,doc,docx,txt,ppt,pptx',
+                'max:10240'
+            ],
+            'video' => [
+                'nullable', 
+                'file',
+                'mimes:mp4,mkv,mov,avi,mpeg,webm',
+                'max:51200'
+            ],
         ];
     }
 }

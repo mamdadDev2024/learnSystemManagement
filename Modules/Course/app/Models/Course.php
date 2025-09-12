@@ -29,6 +29,8 @@ class Course extends Model
         "published",
     ];
 
+    
+
     protected function casts()
     {
         return [

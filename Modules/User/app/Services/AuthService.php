@@ -8,7 +8,7 @@ use Illuminate\Validation\ValidationException;
 use Modules\User\Actions\LoginAction;
 use Modules\User\Actions\LogoutAction;
 use Modules\User\Actions\RegisterAction;
-use Modules\User\Actions\resetPasswordAction;
+use Modules\User\Actions\ResetPasswordAction;
 
 class AuthService extends BaseService
 {
@@ -16,7 +16,7 @@ class AuthService extends BaseService
         private RegisterAction $registerAction,
         private LoginAction $loginAction,
         private LogoutAction $logoutAction,
-        private resetPasswordAction $resetPasswordAction
+        private ResetPasswordAction $resetPasswordAction
     ) {}
 
     public function login(array $credentials): ServiceResponse

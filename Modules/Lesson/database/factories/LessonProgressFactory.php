@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Progress\Database\Factories;
+namespace Modules\Lesson\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\Lesson\Models\LessonProgress;
