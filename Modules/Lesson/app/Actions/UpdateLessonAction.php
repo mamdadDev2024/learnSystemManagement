@@ -10,23 +10,23 @@ use Modules\Lesson\Events\VideoUploaded;
 
 class UpdateLessonAction
 {
-    public function handle(Lesson $lesson, array $data)
+    public function handle(Lesson $Lesson, array $data)
     {
         if (isset($data['title']) && (!isset($data['slug']) || empty($data['slug']))) {
-            $data['slug'] = $this->generateUniqueSlug($data['title'], $lesson->id);
+            $data['slug'] = $this->generateUniqueSlug($data['title'], $Lesson->id);
         }
 
-        if (isset($data['order']) && $data['order'] !== $lesson->order) {
-            $this->reorderLessons($lesson, $data['order']);
+        if (isset($data['order']) && $data['order'] !== $Lesson->order) {
+            $this->reorderLessons($Lesson, $data['order']);
         }
 
-        $lesson->update($this->prepareData($data));
+        $Lesson->update($this->prepareData($data));
 
         if (isset($data['video']) || isset($data['attachment'])) {
-            $this->handleMedia($lesson, $data);
+            $this->handleMedia($Lesson, $data);
         }
 
-        return $lesson->fresh();
+        return $Lesson->fresh();
     }
 
     protected function generateUniqueSlug(string $title, int $lessonId): string
@@ -42,19 +42,19 @@ class UpdateLessonAction
         return $slug;
     }
 
-    protected function reorderLessons(Lesson $lesson, int $newOrder): void
+    protected function reorderLessons(Lesson $Lesson, int $newOrder): void
     {
-        $course = $lesson->course;
+        $course = $Lesson->course;
         
-        if ($newOrder > $lesson->order) {
+        if ($newOrder > $Lesson->order) {
             $course->lessons()
-                ->where('order', '>', $lesson->order)
+                ->where('order', '>', $Lesson->order)
                 ->where('order', '<=', $newOrder)
                 ->decrement('order');
         } else {
             $course->lessons()
                 ->where('order', '>=', $newOrder)
-                ->where('order', '<', $lesson->order)
+                ->where('order', '<', $Lesson->order)
                 ->increment('order');
         }
     }
@@ -68,29 +68,29 @@ class UpdateLessonAction
         return array_merge($defaults, $data);
     }
 
-    protected function handleMedia(Lesson $lesson, array $data): void
+    protected function handleMedia(Lesson $Lesson, array $data): void
     {
         if (isset($data['video']) && $data['video']->isValid()) {
-            if ($lesson->video_url) {
-                Storage::disk('public')->delete($lesson->video_url);
+            if ($Lesson->video_url) {
+                Storage::disk('public')->delete($Lesson->video_url);
             }
             
             $videoPath = $data['video']->store('videos', 'public');
-            $lesson->video_url = $videoPath;
-            VideoUploaded::dispatch($lesson);
+            $Lesson->video_url = $videoPath;
+            VideoUploaded::dispatch($Lesson);
         }
         
         if (isset($data['attachment']) && $data['attachment']->isValid()) {
-            if ($lesson->attachment_url) {
-                Storage::disk('public')->delete($lesson->attachment_url);
+            if ($Lesson->attachment_url) {
+                Storage::disk('public')->delete($Lesson->attachment_url);
             }
             
             $attachmentPath = $data['attachment']->store('attachments', 'public');
-            $lesson->attachment_url = $attachmentPath;
-            AttachmentUploaded::dispatch($lesson);
+            $Lesson->attachment_url = $attachmentPath;
+            AttachmentUploaded::dispatch($Lesson);
 
         }
 
-        $lesson->save();
+        $Lesson->save();
     }
 }

@@ -15,7 +15,7 @@ class Like extends Model
      */
     protected $fillable = ["ip_address", "likable_id", "likable_type"];
 
-    public function likable()
+    public function likeable()
     {
         return $this->morphTo();
     }

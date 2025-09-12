@@ -21,7 +21,7 @@ class UpdateLessonRequest extends ApiFormRequest
      */
     public function rules(): array
     {
-        $lessonId = $this->route('lesson');
+        $lessonId = $this->route('Lesson');
 
         return [
             'title' => [

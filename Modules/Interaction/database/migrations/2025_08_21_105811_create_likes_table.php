@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(User::class)->constrained('users')->cascadeOnDelete();
             $table->ipAddress();
-            $table->morphs('likable');
+            $table->morphs('likeable');
             $table->timestamps();
         });
     }

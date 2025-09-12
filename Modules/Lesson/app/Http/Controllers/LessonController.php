@@ -4,6 +4,7 @@ namespace Modules\Lesson\Http\Controllers;
 
 use App\Contracts\ApiResponse;
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\Request;
 use Modules\Course\Models\Course;
 use Modules\Lesson\Http\Requests\StoreLessonRequest;
@@ -19,6 +20,8 @@ class LessonController extends Controller
      */
     public function index(Course $Course)
     {
+        if (!$Course->exists)
+            abort(404 , 'course not found!');
         $result = $this->service->index($Course);
         return $result->status
             ? ApiResponse::success($result->data , $result->message)
@@ -30,6 +33,8 @@ class LessonController extends Controller
      */
     public function store(StoreLessonRequest $request, Course $Course)
     {
+        if (!$Course->exists)
+            abort(404 , 'course not found!');
         $result = $this->service->create($Course , $request->validated());
         return $result->status
             ? ApiResponse::success($result->data , $result->message)
@@ -39,9 +44,11 @@ class LessonController extends Controller
     /**
      * Show the specified resource.
      */
-    public function show(Lesson $lesson)
+    public function show(Lesson $Lesson)
     {
-        $result = $this->service->show($lesson);
+        if (!$Lesson->exists)
+            abort(404 , 'lesson not found!');
+        $result = $this->service->show($Lesson);
         return $result->status
             ? ApiResponse::success($result->data , $result->message)
             : ApiResponse::error($result->message , $result->data);
@@ -50,9 +57,11 @@ class LessonController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateLessonRequest $request, Lesson $lesson)
+    public function update(UpdateLessonRequest $request, Lesson $Lesson)
     {
-        $result = $this->service->update($lesson , $request->validated());
+        if (!$Lesson->exists())
+            abort(404 , 'lesson not found!');
+        $result = $this->service->update($Lesson , $request->validated());
         return $result->status
             ? ApiResponse::success($result->data , $result->message)
             : ApiResponse::error($result->message , $result->data);
@@ -61,9 +70,12 @@ class LessonController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Lesson $lesson)
+    public function destroy(Lesson $Lesson)
     {
-        $result = $this->service->delete($lesson);
+
+        if (!$Lesson->exists)
+            abort(404 , 'lesson not found!');
+        $result = $this->service->delete($Lesson);
         return $result->status
             ? ApiResponse::success($result->data , $result->message)
             : ApiResponse::error($result->message , $result->data);
