@@ -18,25 +18,25 @@ class Lesson extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title',
-        'description',
-        'order',
-        'attachment_url',
-        'attachment_name',
-        'video_url',
-        'video_name',
-        'course_id',
-        'is_published',
-        'duration',
-        'slug'
+        "title",
+        "description",
+        "order",
+        "attachment_url",
+        "attachment_name",
+        "video_url",
+        "video_name",
+        "course_id",
+        "is_published",
+        "duration",
+        "slug",
     ];
 
     protected $casts = [
-        'order' => 'integer',
-        'is_published' => 'boolean',
-        'duration' => 'integer', 
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
+        "order" => "integer",
+        "is_published" => "boolean",
+        "duration" => "integer",
+        "created_at" => "datetime",
+        "updated_at" => "datetime",
     ];
 
     protected static function boot()
@@ -45,10 +45,12 @@ class Lesson extends Model
 
         static::creating(function ($lesson) {
             if (empty($lesson->order)) {
-                $lesson->order = static::where('course_id', $lesson->course_id)
-                    ->max('order') + 1;
+                $lesson->order =
+                    static::where("course_id", $lesson->course_id)->max(
+                        "order",
+                    ) + 1;
             }
-            
+
             if (empty($lesson->slug)) {
                 $lesson->slug = \Illuminate\Support\Str::slug($lesson->title);
             }
@@ -62,22 +64,22 @@ class Lesson extends Model
 
     public function likes()
     {
-        return $this->morphMany(Like::class , 'likeable');
+        return $this->morphMany(Like::class, "likeable");
     }
 
     public function comments()
     {
-        return $this->morphMany(Comment::class , 'commentable');
+        return $this->morphMany(Comment::class, "commentable");
     }
 
     public function views()
     {
-        return $this->morphMany(View::class , 'viewable');
+        return $this->morphMany(View::class, "viewable");
     }
 
     public function progress(): HasMany
     {
-        return $this->hasMany(\Modules\Lesson\Models\LessonProgress::class);
+        return $this->hasMany(\Modules\Lesson\Models\Progress::class);
     }
 
     /**
@@ -85,45 +87,45 @@ class Lesson extends Model
      */
     public function scopePublished($query)
     {
-        return $query->where('is_published', true);
+        return $query->where("is_published", true);
     }
 
     /**
      * Scope a query to order lessons by their order.
      */
-    public function scopeOrdered($query, $direction = 'asc')
+    public function scopeOrdered($query, $direction = "asc")
     {
-        return $query->orderBy('order', $direction);
+        return $query->orderBy("order", $direction);
     }
 
     public function updateProgress($percentage)
     {
-        LessonProgress::updateOrCreate(
+        Progress::updateOrCreate(
             [
-                'user_id' => auth()->id(),
-                'lesson_id' => $this->id
+                "user_id" => auth()->id(),
+                "lesson_id" => $this->id,
             ],
             [
-                'progress_percentage' => max(0, min(100, $percentage)),
-                'last_accessed_at' => now(),
-                'started_at' => DB::raw('COALESCE(started_at, NOW())')
-            ]
+                "progress_percentage" => max(0, min(100, $percentage)),
+                "last_accessed_at" => now(),
+                "started_at" => DB::raw("COALESCE(started_at, NOW())"),
+            ],
         );
     }
 
     public function markAsCompleted()
     {
-        LessonProgress::updateOrCreate(
+        Progress::updateOrCreate(
             [
-                'user_id' => auth()->id(),
-                'lesson_id' => $this->id
+                "user_id" => auth()->id(),
+                "lesson_id" => $this->id,
             ],
             [
-                'is_completed' => true,
-                'progress_percentage' => 100,
-                'completed_at' => now(),
-                'last_accessed_at' => now()
-            ]
+                "is_completed" => true,
+                "progress_percentage" => 100,
+                "completed_at" => now(),
+                "last_accessed_at" => now(),
+            ],
         );
     }
 
@@ -132,8 +134,8 @@ class Lesson extends Model
      */
     public function getNextLessonAttribute()
     {
-        return static::where('course_id', $this->course_id)
-            ->where('order', '>', $this->order)
+        return static::where("course_id", $this->course_id)
+            ->where("order", ">", $this->order)
             ->ordered()
             ->first();
     }
@@ -143,9 +145,9 @@ class Lesson extends Model
      */
     public function getPreviousLessonAttribute()
     {
-        return static::where('course_id', $this->course_id)
-            ->where('order', '<', $this->order)
-            ->ordered('desc')
+        return static::where("course_id", $this->course_id)
+            ->where("order", "<", $this->order)
+            ->ordered("desc")
             ->first();
     }
 
@@ -171,17 +173,17 @@ class Lesson extends Model
     public function getFormattedDurationAttribute(): string
     {
         if (!$this->duration) {
-            return 'N/A';
+            return "N/A";
         }
 
         $hours = floor($this->duration / 60);
         $minutes = $this->duration % 60;
 
         if ($hours > 0) {
-            return sprintf('%dh %02dm', $hours, $minutes);
+            return sprintf("%dh %02dm", $hours, $minutes);
         }
 
-        return sprintf('%dm', $minutes);
+        return sprintf("%dm", $minutes);
     }
 
     /**

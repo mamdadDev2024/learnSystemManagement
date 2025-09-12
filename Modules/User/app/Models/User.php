@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\Course\Models\Course;
 use Modules\Enrollment\Models\Enrollment;
-use Modules\Lesson\Models\LessonProgress;
+use Modules\Lesson\Models\Progress;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -18,8 +18,7 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasApiTokens, HasRoles;
 
-
-    protected $guard_name = 'api';
+    protected $guard_name = "api";
     /**
      * The attributes that are mass assignable.
      *
@@ -47,9 +46,9 @@ class User extends Authenticatable
         ];
     }
 
-    public function lessonProgress()
+    public function progress()
     {
-        return $this->hasMany(LessonProgress::class);
+        return $this->hasMany(Progress::class);
     }
 
     public function courses(): HasMany
