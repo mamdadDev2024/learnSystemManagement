@@ -76,32 +76,4 @@ class CourseService extends BaseService
             return $course;
         });
     }
-
-    public function findOrFail($id)
-    {
-        return $this->execute(function () use ($id) {
-            $course = Course::find($id);
-
-            if (!$course) {
-                throw new ModelNotFoundException(
-                    "Course with ID {$id} not found",
-                    404,
-                );
-            }
-
-            return $course;
-        });
-    }
-
-    public function publish(Course $course): Course
-    {
-        $course->update(["published" => true]);
-        return $course;
-    }
-
-    public function unpublish(Course $course): Course
-    {
-        $course->update(["published" => false]);
-        return $course;
-    }
 }

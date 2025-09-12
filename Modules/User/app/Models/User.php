@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\Course\Models\Course;
 use Modules\Enrollment\Models\Enrollment;
+use Modules\Lesson\Models\LessonProgress;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -44,6 +45,11 @@ class User extends Authenticatable
             "email_verified_at" => "datetime",
             "password" => "hashed",
         ];
+    }
+
+    public function lessonProgress()
+    {
+        return $this->hasMany(LessonProgress::class);
     }
 
     public function courses(): HasMany

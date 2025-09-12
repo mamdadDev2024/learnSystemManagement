@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\Course\Http\Requests;
+namespace Modules\Lesson\Http\Requests;
 
 use App\Contracts\ApiFormRequest;
 
-class StoreCourseRequest extends ApiFormRequest
+class StoreLessonRequest extends ApiFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +22,7 @@ class StoreCourseRequest extends ApiFormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string', 'max:255' , 'unique:courses'],
-            'description' => ['required'],
-            'price' => ['required', 'integer', 'min:0'],
-            'published' => ['boolean'],
+            'title' => 'required'
         ];
     }
 }

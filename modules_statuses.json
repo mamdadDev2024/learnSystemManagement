@@ -3,5 +3,6 @@
     "Enrollment": true,
     "Course": true,
     "Interaction": true,
-    "Authorization": true
+    "Authorization": true,
+    "Lesson": true
 }
