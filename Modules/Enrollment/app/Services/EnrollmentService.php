@@ -20,29 +20,23 @@ class EnrollmentService extends BaseService
 
     public function create(array $data): Enrollment
     {
-        return $this->excute(function () use($data) {
-            return $this->createAction->handle($data);
-        })
+        return $this->excute(fn() => $this->createAction->handle($data));
     }
 
     public function update(Enrollment $enrollment, array $data): Enrollment
     {
-        return $this->excute(function () use($enrollment, $data) {
-            return $this->updateAction->handle($enrollment, $data);
-        })
+        return $this->excute(
+            fn() => $this->updateAction->handle($enrollment, $data),
+        );
     }
 
     public function check(array $data): bool
     {
-        return $this->excute(function () use($data) {
-            return $this->checkAction->handle($data);
-        })
+        return $this->excute(fn() => $this->checkAction->handle($data));
     }
 
-    public function delete(Enrollment $enrollment): void
+    public function delete(Enrollment $enrollment)
     {
-        return $this->excute(function () use($enrollment) {
-            $this->deleteAction->handle($enrollment);
-        })
+        return $this->excute(fn() => $this->deleteAction->handle($enrollment));
     }
 }
