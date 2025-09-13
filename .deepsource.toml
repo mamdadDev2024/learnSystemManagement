@@ -1,0 +1,7 @@
+version = 1
+
+[[analyzers]]
+name = "php"
+
+  [analyzers.meta]
+  bootstrap_files = ["./bootstrap/app.php"]
