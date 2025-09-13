@@ -12,7 +12,9 @@ use Modules\User\Http\Requests\ReceiveCodeVerificationRequest;
 
 class VerificationController extends Controller
 {
-    public function __construct(private VerificationService $service) {}
+    public function __construct(private VerificationService $service)
+    {
+    }
 
     public function sendVerificationCode(SendVerificationRequest $request)
     {

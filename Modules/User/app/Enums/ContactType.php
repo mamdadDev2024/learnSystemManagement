@@ -4,11 +4,13 @@ namespace Modules\User\Enums;
 
 use Illuminate\Validation\ValidationException;
 
-enum ContactType: string {
+enum ContactType: string
+{
     case EMAIL = 'email';
     case PHONE = 'phone';
 
-    public static function detectContactType(string $contact): self {
+    public static function detectContactType(string $contact): self
+    {
         if (filter_var($contact, FILTER_VALIDATE_EMAIL)) {
             return self::EMAIL;
         }

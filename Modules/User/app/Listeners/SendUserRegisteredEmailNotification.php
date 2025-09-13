@@ -8,7 +8,9 @@ use Modules\User\Notifications\UserRegistered as UserRegisteredNotification;
 
 class SendUserRegisteredEmailNotification implements ShouldQueue
 {
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     public function handle(UserRegistered $event): void
     {

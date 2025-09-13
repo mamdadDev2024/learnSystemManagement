@@ -43,10 +43,10 @@ class UpdateLessonRequest extends ApiFormRequest
             'duration' => 'nullable|integer|min:0',
             'is_published' => 'nullable|boolean',
             'course_id' => 'nullable|exists:courses,id',
-            
+
             'attachment' => 'nullable|file|mimes:zip,rar,pdf,doc,docx,txt|max:10240', // 10MB
             'video' => 'nullable|file|mimes:mp4,mkv,mov,avi|max:51200', // 50MB
-            
+
             'attachment_url' => 'nullable|url|max:500',
             'attachment_name' => 'nullable|string|max:255',
             'video_url' => 'nullable|url|max:500',

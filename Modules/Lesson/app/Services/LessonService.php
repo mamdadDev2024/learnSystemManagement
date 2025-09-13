@@ -23,48 +23,49 @@ class LessonService extends BaseService
         private DeleteLessonAction $deleteAction,
         private GetProgressAction $getProgressAction,
         private ImportProgressAction $importProgressAction,
-    ) {}
+    ) {
+    }
 
     public function index(Course $course)
     {
-        return $this->execute(fn() => $this->indexAction->handle($course));
+        return $this->execute(fn () => $this->indexAction->handle($course));
     }
 
     public function show(Lesson $lesson)
     {
-        return $this->execute(fn() => $this->showAction->handle($lesson));
+        return $this->execute(fn () => $this->showAction->handle($lesson));
     }
 
     public function update(Lesson $lesson, array $data)
     {
         return $this->execute(
-            fn() => $this->updateAction->handle($lesson, $data),
+            fn () => $this->updateAction->handle($lesson, $data),
         );
     }
 
     public function create(Course $course, array $data)
     {
         return $this->execute(
-            fn() => $this->createAction->handle($course, $data),
+            fn () => $this->createAction->handle($course, $data),
         );
     }
 
     public function delete(Lesson $lesson)
     {
-        return $this->execute(fn() => $this->deleteAction->handle($lesson));
+        return $this->execute(fn () => $this->deleteAction->handle($lesson));
     }
 
     public function getProgress(Lesson $lesson)
     {
         return $this->execute(
-            fn() => $this->getProgressAction->handle($lesson),
+            fn () => $this->getProgressAction->handle($lesson),
         );
     }
 
     public function importProgress(Lesson $lesson, array $data)
     {
         return $this->execute(
-            fn() => $this->importProgressAction->handle($lesson, $data),
+            fn () => $this->importProgressAction->handle($lesson, $data),
         );
     }
 }

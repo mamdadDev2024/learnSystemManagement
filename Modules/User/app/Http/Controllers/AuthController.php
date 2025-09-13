@@ -13,7 +13,9 @@ use Modules\User\Events\UserRegistered;
 
 class AuthController extends Controller
 {
-    public function __construct(private AuthService $service) {}
+    public function __construct(private AuthService $service)
+    {
+    }
 
     public function login(LoginApiRequest $request)
     {

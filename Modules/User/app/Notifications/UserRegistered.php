@@ -11,7 +11,9 @@ class UserRegistered extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     public function via($notifiable): array
     {
@@ -20,7 +22,7 @@ class UserRegistered extends Notification implements ShouldQueue
 
     public function toMail($notifiable): MailMessage
     {
-        return (new MailMessage)
+        return (new MailMessage())
             ->greeting('سلام ' . ($notifiable->name ?? 'کاربر عزیز'))
             ->line('به ' . config('app.name') . ' خوش آمدید.')
             ->action('ورود به حساب کاربری', url('/login'))

@@ -17,7 +17,8 @@ class AuthService extends BaseService
         private LoginAction $loginAction,
         private LogoutAction $logoutAction,
         private ResetPasswordAction $resetPasswordAction
-    ) {}
+    ) {
+    }
 
     public function login(array $credentials): ServiceResponse
     {
@@ -65,11 +66,11 @@ class AuthService extends BaseService
 
     public function resetPassword(array $data): ServiceResponse
     {
-        return $this->execute(function () use ($data){
+        return $this->execute(function () use ($data) {
             $this->resetPasswordAction->handle($data);
             return [
                 'message' => 'password reset successful'
             ];
-        } , 'reset password failed!');
+        }, 'reset password failed!');
     }
 }

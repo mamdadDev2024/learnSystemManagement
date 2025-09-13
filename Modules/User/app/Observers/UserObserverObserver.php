@@ -11,10 +11,12 @@ class UserObserverObserver
     /**
      * Handle the UserObserver "created" event.
      */
-    public function created(User $user): void {
+    public function created(User $user): void
+    {
         event(new UserRegistered($user));
     }
-    public function deleted(User $user): void {
+    public function deleted(User $user): void
+    {
         event(new UserDeleted($user));
     }
 }

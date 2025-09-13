@@ -27,7 +27,7 @@ class ProgressFactory extends Factory
             "started_at" => $this->faker
                 ->optional(70)
                 ->dateTimeBetween("-1 month", "now"),
-            "completed_at" => fn(array $attributes) => $attributes[
+            "completed_at" => fn (array $attributes) => $attributes[
                 "is_completed"
             ]
                 ? $this->faker->dateTimeBetween(
@@ -49,7 +49,7 @@ class ProgressFactory extends Factory
     public function completed(): static
     {
         return $this->state(
-            fn(array $attributes) => [
+            fn (array $attributes) => [
                 "is_completed" => true,
                 "progress_percentage" => 100,
                 "completed_at" => $attributes["started_at"]
@@ -68,7 +68,7 @@ class ProgressFactory extends Factory
     public function notCompleted(): static
     {
         return $this->state(
-            fn(array $attributes) => [
+            fn (array $attributes) => [
                 "is_completed" => false,
                 "progress_percentage" => $this->faker->numberBetween(0, 99),
                 "completed_at" => null,
@@ -82,7 +82,7 @@ class ProgressFactory extends Factory
     public function justStarted(): static
     {
         return $this->state(
-            fn(array $attributes) => [
+            fn (array $attributes) => [
                 "is_completed" => false,
                 "progress_percentage" => $this->faker->numberBetween(0, 20),
                 "started_at" => now(),
@@ -99,7 +99,7 @@ class ProgressFactory extends Factory
     public function inProgress(): static
     {
         return $this->state(
-            fn(array $attributes) => [
+            fn (array $attributes) => [
                 "is_completed" => false,
                 "progress_percentage" => $this->faker->numberBetween(21, 99),
                 "time_spent" => $this->faker->numberBetween(300, 1800),
@@ -113,7 +113,7 @@ class ProgressFactory extends Factory
     public function withPercentage(int $percentage): static
     {
         return $this->state(
-            fn(array $attributes) => [
+            fn (array $attributes) => [
                 "progress_percentage" => max(0, min(100, $percentage)),
                 "is_completed" => $percentage === 100,
                 "completed_at" =>
@@ -130,7 +130,7 @@ class ProgressFactory extends Factory
     public function withTimeSpent(int $seconds): static
     {
         return $this->state(
-            fn(array $attributes) => [
+            fn (array $attributes) => [
                 "time_spent" => max(0, $seconds),
             ],
         );

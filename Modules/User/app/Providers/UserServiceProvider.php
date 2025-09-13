@@ -30,10 +30,10 @@ class UserServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
-        RateLimiter::for('check-user' , function (Request $request){
+        RateLimiter::for('check-user', function (Request $request) {
             return app()->isLocal() ? Limit::none() : Limit::perMinute(2)->by($request->ip());
         });
-        RateLimiter::for('auth' , function (Request $request){
+        RateLimiter::for('auth', function (Request $request) {
             return app()->isLocal() ? Limit::none() : Limit::perSecond(30)->by($request->ip());
         });
     }

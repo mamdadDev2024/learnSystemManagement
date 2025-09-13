@@ -4,6 +4,7 @@ namespace Modules\Interaction\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 // use Modules\Interaction\Database\Factories\ViewFactory;
 
 class View extends Model

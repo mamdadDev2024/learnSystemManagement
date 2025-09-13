@@ -22,7 +22,8 @@ class CourseService extends BaseService
         private UpdateCourseAction $updateAction,
         private DeleteCourseAction $deleteAction,
         private ShowCourseAction $showAction,
-    ) {}
+    ) {
+    }
 
     public function index()
     {
@@ -39,7 +40,7 @@ class CourseService extends BaseService
 
     public function get(Course $course)
     {
-        return $this->execute(fn() => $this->showAction->handle($course));
+        return $this->execute(fn () => $this->showAction->handle($course));
     }
 
     public function delete(Course $course)

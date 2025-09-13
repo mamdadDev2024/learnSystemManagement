@@ -2,7 +2,8 @@
 
 namespace Modules\User\Enums;
 
-enum VerificationActionType: string {
+enum VerificationActionType: string
+{
     case LOGIN = 'login';
     case REGISTER = 'register';
     case FORGOT_PASSWORD = 'reset-password';

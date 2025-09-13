@@ -28,7 +28,7 @@ class SendVerificationRequest extends FormRequest
             }
 
             $contact = $this->input('contact');
-            $retryTime = (new VerificationService)->getRetryTime($contact, $this->contactType, $this->actionType);
+            $retryTime = (new VerificationService())->getRetryTime($contact, $this->contactType, $this->actionType);
 
             if ($retryTime > 0) {
                 $validator->errors()->add('contact', __('auth::validation.contact_retry_time', ['retry_time' => $retryTime]));

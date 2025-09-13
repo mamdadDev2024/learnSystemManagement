@@ -84,7 +84,7 @@ class VerificationService
     {
         try {
             $user = User::whereEmail($contact)->first();
-            Mail::to($contact)->send(new VerificationCodeEmail($code , $user));
+            Mail::to($contact)->send(new VerificationCodeEmail($code, $user));
             return true;
         } catch (\Throwable $e) {
             \Log::error("Email sending failed: {$e->getMessage()}");
