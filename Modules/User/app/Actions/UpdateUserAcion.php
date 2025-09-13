@@ -10,6 +10,5 @@ class UpdateUserAcion
         if ($user->isDirty())
             $user->update($data);
             return $user->refresh();
-        return null;
     }
 }
