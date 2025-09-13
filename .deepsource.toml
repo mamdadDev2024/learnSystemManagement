@@ -5,33 +5,50 @@ name = "php"
 enabled = true
 
 [[analyzers]]
-name = "security"
+name = "composer"
 enabled = true
 
+[[analyzers]]
+name = "git"
+enabled = true
+
+# تنظیمات خاص آنالایزر PHP
+[analyzers.php]
+enabled = true
+
+# exclude فایل‌های غیر ضروری
+[analyzers.php.meta]
+root = "."
+
+exclude = [
+  "vendor/",
+  "node_modules/",
+  "storage/",
+  "bootstrap/",
+  "public/",
+  "tests/",
+  "*.blade.php",
+  "database/",
+  "config/"
+]
+
+# تنظیمات transformer
 [[transformers]]
 name = "php-cs-fixer"
 enabled = true
 
-[[transformers]]
-name = "phpcodesniffer"
-enabled = true
+# تنظیمات عمومی
+[python]
+version = "3.8"
 
-[tool.php]
+[php]
 version = "8.4"
 
-[tool.php.cs-fixer]
-rules = [
-    "@PSR12",
-    "@PhpCsFixer",
-    "@Symfony"
-]
+[go]
+version = "1.19"
 
-exclude_patterns = [
-    "node_modules/",
-    "storage/",
-    "bootstrap/",
-    "public/",
-    "vendor/",
-    "*.blade.php",
-    "tests/"
-]
+[javascript]
+version = "18"
+
+[java]
+version = "11"
