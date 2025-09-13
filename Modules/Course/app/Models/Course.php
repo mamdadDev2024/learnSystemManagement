@@ -40,14 +40,20 @@ class Course extends Model
 
     public function getCourseProgressAttribute()
     {
-        $totalLessons = $this->course->lessons()->count();
-        $completedLessons = $this->course->lessons()
-            ->whereHas('progress', function($query) {
+        $totalLessons = $this->lessons()->count();
+
+        $completedLessons = $this->lessons()
+            ->whereHas('progress', function ($query) {
                 $query->where('user_id', auth()->id())
                     ->where('is_completed', true);
-            })->count();
-        
-        return $totalLessons > 0 ? round(($completedLessons / $totalLessons) * 100) : 0;
+            })
+            ->count();
+
+    }
+
+    public function progress()
+    {
+        return $this->hasMany(CourseProgress::class);
     }
 
     public function enrollments()

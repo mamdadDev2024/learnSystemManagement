@@ -70,7 +70,7 @@ class LessonDatabaseSeeder extends Seeder
                     "user_id" => $user->id,
                     "lesson_id" => $lesson->id,
                     "is_completed" => $isCompleted,
-                    "progress_percentage" => $isCompleted ? 100 : rand(10, 95),
+                    "percentage" => $isCompleted ? 100 : rand(10, 95),
                     "started_at" => now()->subDays(rand(1, 30)),
                     "completed_at" => $isCompleted
                         ? now()->subDays(rand(0, 15))

@@ -12,46 +12,32 @@ class ImportProgressAction
 {
     public function handle(Lesson $lesson, array $data)
     {
-        return DB::transaction(function () use ($lesson, $data) {
-            $user = auth("sanctum")->user();
+        $user = auth("sanctum")->user();
 
-            if (
-                !$lesson->course
-                    ->students()
-                    ->where("user_id", $user->id)
-                    ->exists()
-            ) {
-                throw new \Exception(
-                    "User does not have access to this course",
-                );
-            }
+        $progress = $lesson->progress()->updateOrCreate(
+            [
+                "user_id" => $user->id,
+                "lesson_id" => $lesson->id,
+            ],
+            [
+                "percentage" => $data["percentage"],
+                "started_at" => $data["started_at"],
+                "completed_at" => $data["completed_at"] ?? null,
+                "time_spent" => $data["time_spent"] ?? 0,
+                "status" => $this->determineStatus(
+                    $data["percentage"],
+                    $data["completed_at"] ?? null,
+                ),
+            ],
+        );
 
-            $progress = $lesson->progress()->updateOrCreate(
-                [
-                    "user_id" => $user->id,
-                    "lesson_id" => $lesson->id,
-                ],
-                [
-                    "percentage" => $data["percentage"],
-                    "started_at" => $data["started_at"],
-                    "completed_at" => $data["completed_at"] ?? null,
-                    "time_spent" => $data["time_spent"] ?? 0,
-                    "status" => $this->determineStatus(
-                        $data["percentage"],
-                        $data["completed_at"] ?? null,
-                    ),
-                    "notes" => $data["notes"] ?? null,
-                ],
-            );
+        if ($data["percentage"] == 100 && !$progress->completed_at) {
+            $progress->update(["completed_at" => now()]);
+        }
 
-            if ($data["percentage"] == 100 && !$progress->completed_at) {
-                $progress->update(["completed_at" => now()]);
-            }
+        $this->updateCourseProgress($lesson->course, $user);
 
-            $this->updateCourseProgress($lesson->course, $user);
-
-            return $progress->load("user", "lesson");
-        });
+        return $progress->load("user", "lesson");
     }
 
     protected function determineStatus(
@@ -85,7 +71,6 @@ class ImportProgressAction
             [
                 "percentage" => $overallProgress,
                 "completed_lessons" => $completedLessons,
-                "total_lessons" => $totalLessons,
                 "last_activity_at" => now(),
             ],
         );

@@ -1,0 +1,37 @@
+version = 1
+
+[[analyzers]]
+name = "php"
+enabled = true
+
+[[analyzers]]
+name = "security"
+enabled = true
+
+[[transformers]]
+name = "php-cs-fixer"
+enabled = true
+
+[[transformers]]
+name = "phpcodesniffer"
+enabled = true
+
+[tool.php]
+version = "8.4"
+
+[tool.php.cs-fixer]
+rules = [
+    "@PSR12",
+    "@PhpCsFixer",
+    "@Symfony"
+]
+
+exclude_patterns = [
+    "node_modules/",
+    "storage/",
+    "bootstrap/",
+    "public/",
+    "vendor/",
+    "*.blade.php",
+    "tests/"
+]
