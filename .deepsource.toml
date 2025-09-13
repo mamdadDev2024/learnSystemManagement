@@ -1,16 +1,19 @@
 version = 1
+version = 1
+
+test_patterns = [
+  "tests/**",
+  "test_e2e/**"
+]
+exclude_patterns = [
+  "vendor/**"
+]
 
 [[analyzers]]
 name = "php"
-enabled = true
 
-[[analyzers]]
-name = "composer"
-enabled = true
-
-[[analyzers]]
-name = "git"
-enabled = true
+  [analyzers.meta]
+  bootstrap_files = ["config/bootstrap.php"]
 
 [analyzers.php.meta]
 root = "."
