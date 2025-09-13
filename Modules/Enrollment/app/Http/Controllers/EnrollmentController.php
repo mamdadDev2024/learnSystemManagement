@@ -8,13 +8,13 @@ use Modules\Enrollment\Services\EnrollmentService;
 
 class EnrollmentController extends Controller
 {
-    public function __construct(private EnrollmentService $service){}
+    public function __construct(private EnrollmentService $service) {}
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return $this->service->
+        return $this->service->index();
     }
 
     /**
