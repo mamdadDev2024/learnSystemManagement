@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 use Modules\Course\Models\Course;
 use Modules\User\Models\User;
 
-return new class extends Migration {
+return new class () extends Migration {
     /**
      * Run the migrations.
      */

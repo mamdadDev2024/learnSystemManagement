@@ -6,7 +6,8 @@ use Modules\User\Models\User;
 
 class DeleteUserAcion
 {
-    public function handle(User $user) {
+    public function handle(User $user)
+    {
         return $user->delete();
     }
 }

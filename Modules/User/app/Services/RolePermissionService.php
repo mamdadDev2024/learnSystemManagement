@@ -4,5 +4,7 @@ namespace Modules\User\Services;
 
 class RolePermissionService
 {
-    public function handle() {}
+    public function handle()
+    {
+    }
 }

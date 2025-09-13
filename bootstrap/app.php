@@ -14,7 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->redirectGuestsTo(
-            fn(Request $request) => route("api.auth.login"),
+            fn (Request $request) => route("api.auth.login"),
         );
         $middleware->alias([
             "role" => \Spatie\Permission\Middleware\RoleMiddleware::class,

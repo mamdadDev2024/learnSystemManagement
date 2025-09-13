@@ -45,7 +45,7 @@ class UpdateLessonAction
     protected function reorderLessons(Lesson $Lesson, int $newOrder): void
     {
         $course = $Lesson->course;
-        
+
         if ($newOrder > $Lesson->order) {
             $course->lessons()
                 ->where('order', '>', $Lesson->order)
@@ -74,17 +74,17 @@ class UpdateLessonAction
             if ($Lesson->video_url) {
                 Storage::disk('public')->delete($Lesson->video_url);
             }
-            
+
             $videoPath = $data['video']->store('videos', 'public');
             $Lesson->video_url = $videoPath;
             VideoUploaded::dispatch($Lesson);
         }
-        
+
         if (isset($data['attachment']) && $data['attachment']->isValid()) {
             if ($Lesson->attachment_url) {
                 Storage::disk('public')->delete($Lesson->attachment_url);
             }
-            
+
             $attachmentPath = $data['attachment']->store('attachments', 'public');
             $Lesson->attachment_url = $attachmentPath;
             AttachmentUploaded::dispatch($Lesson);

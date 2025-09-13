@@ -13,10 +13,10 @@ Route::get('/user', function (Request $request) {
 
 Route::as('auth.')->prefix('auth')->group(function () {
     Route::middleware(['guest:sanctum', 'throttle:auth'])->group(function () {
-        Route::post('login',                  [AuthController::class, 'login'])->name('login');
-        Route::post('register',               [AuthController::class, 'register'])->name('register');
+        Route::post('login', [AuthController::class, 'login'])->name('login');
+        Route::post('register', [AuthController::class, 'register'])->name('register');
         Route::post('send-verification-code', [VerificationController::class, 'sendVerificationCode'])->name('send.code');
-        Route::post('verify-code',            [VerificationController::class, 'verifyCode'])->name('verify');
+        Route::post('verify-code', [VerificationController::class, 'verifyCode'])->name('verify');
     });
 
     Route::post('reset-password', [AuthController::class, 'resetPassword'])->name('reset.password');

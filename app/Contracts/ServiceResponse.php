@@ -8,7 +8,8 @@ class ServiceResponse
         public bool $status,
         public ?string $message = null,
         public mixed $data = null,
-    ) {}
+    ) {
+    }
 
     public static function success(mixed $data = null, string $message = 'Success'): self
     {

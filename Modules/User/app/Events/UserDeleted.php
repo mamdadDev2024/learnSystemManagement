@@ -9,10 +9,14 @@ use Modules\User\Models\User;
 
 class UserDeleted
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(public User $user) {}
+    public function __construct(public User $user)
+    {
+    }
 }

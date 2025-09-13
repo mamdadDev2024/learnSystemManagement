@@ -5,8 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Modules\Course\Models\Course;
 
-return new class extends Migration
-{
+return new class () extends Migration {
     /**
      * Run the migrations.
      */
@@ -29,7 +28,7 @@ return new class extends Migration
             $table->index(['course_id', 'order']);
             $table->index(['course_id', 'is_published']);
             $table->index(['slug']);
-            
+
         });
     }
 

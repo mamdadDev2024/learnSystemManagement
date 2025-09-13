@@ -18,23 +18,22 @@ class CheckUserRequest extends FormRequest
                 'required',
                 'string',
                 function ($attribute, $value, $fail) {
-                    try{
+                    try {
                         $contactType = ContactType::detectContactType($value);
-                    }catch (\InvalidArgumentException $e)
-                    {
+                    } catch (\InvalidArgumentException $e) {
                         $fail('Invalid Contact');
                         return;
                     }
                     switch ($contactType) {
                         case (ContactType::EMAIL):
-                            $validator = Validator(['email' => $value] , ['email']);
+                            $validator = Validator(['email' => $value], ['email']);
                             if ($validator->fails()) {
                                 $fail('The contact must be a valid email address.');
                             }
                             return;
-                        
+
                         case (ContactType::PHONE):
-                            $validator = Validator(['contact' => $value] , ['phone:mobile']);
+                            $validator = Validator(['contact' => $value], ['phone:mobile']);
                             if ($validator->fails()) {
                                 $fail('The contact must be a valid phone number.');
                             }

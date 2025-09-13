@@ -16,7 +16,8 @@ class CourseController extends Controller
     public function __construct(
         private CourseService $service,
         private InteractService $interactService,
-    ) {}
+    ) {
+    }
 
     /**
      * Display a listing of the resource.

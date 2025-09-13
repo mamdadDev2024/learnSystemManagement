@@ -7,8 +7,10 @@ use Modules\User\Services\RolePermissionService;
 
 class RolePermissionController extends Controller
 {
-    public function __construct(private RolePermissionService $service){}
-    
+    public function __construct(private RolePermissionService $service)
+    {
+    }
+
     public function index()
     {
         return response()->json([]);

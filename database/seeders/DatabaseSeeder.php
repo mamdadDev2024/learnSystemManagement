@@ -38,12 +38,12 @@ class DatabaseSeeder extends Seeder
 
         $roles = ["admin", "user", "teacher"];
         foreach ($roles as $roleName) {
-            $role = Role::create(['name'=>$roleName , 'guard_name' => 'api'])->first();
+            $role = Role::create(['name' => $roleName , 'guard_name' => 'api'])->first();
             $admin->assignRole($role);
         }
         $this->call([
-            UserDatabaseSeeder::class, 
-            CourseDatabaseSeeder::class, 
+            UserDatabaseSeeder::class,
+            CourseDatabaseSeeder::class,
         ]);
 
         if ($adminRole = Role::where('name', 'admin')->first()) {

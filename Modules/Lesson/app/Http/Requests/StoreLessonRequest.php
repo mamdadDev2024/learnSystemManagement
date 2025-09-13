@@ -31,7 +31,7 @@ class StoreLessonRequest extends ApiFormRequest
                 'max:10240'
             ],
             'video' => [
-                'nullable', 
+                'nullable',
                 'file',
                 'mimes:mp4,mkv,mov,avi,mpeg,webm',
                 'max:51200'

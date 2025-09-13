@@ -15,7 +15,9 @@ use Modules\Lesson\Services\LessonService;
 
 class LessonController extends Controller
 {
-    public function __construct(private LessonService $service) {}
+    public function __construct(private LessonService $service)
+    {
+    }
     /**
      * Display a listing of the resource.
      */

@@ -36,7 +36,7 @@ class ReceiveCodeVerificationRequest extends ApiFormRequest
             }
 
             $contact = $this->input('contact');
-            $retryTime = (new VerificationService)->getRetryTime(
+            $retryTime = (new VerificationService())->getRetryTime(
                 $contact,
                 $this->contactType,
                 $this->actionType

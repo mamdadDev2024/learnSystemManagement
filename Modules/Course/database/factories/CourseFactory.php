@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use Modules\User\Database\Factories\UserFactory;
 use Modules\User\Models\User;
+
 class CourseFactory extends Factory
 {
     /**
