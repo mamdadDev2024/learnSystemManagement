@@ -12,15 +12,10 @@ enabled = true
 name = "git"
 enabled = true
 
-# تنظیمات خاص آنالایزر PHP
-[analyzers.php]
-enabled = true
-
-# exclude فایل‌های غیر ضروری
 [analyzers.php.meta]
 root = "."
 
-exclude = [
+exclude_patterns = [
   "vendor/",
   "node_modules/",
   "storage/",
@@ -32,23 +27,11 @@ exclude = [
   "config/"
 ]
 
-# تنظیمات transformer
+[analyzers.php.config]
+security_checks = true
+laravel_specific_checks = true
+performance_checks = true
+
 [[transformers]]
 name = "php-cs-fixer"
 enabled = true
-
-# تنظیمات عمومی
-[python]
-version = "3.8"
-
-[php]
-version = "8.4"
-
-[go]
-version = "1.19"
-
-[javascript]
-version = "18"
-
-[java]
-version = "11"
