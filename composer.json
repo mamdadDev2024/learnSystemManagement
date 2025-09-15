@@ -14,6 +14,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
         "nwidart/laravel-modules": "^12.0",
+        "pbmedia/laravel-ffmpeg": "^8.7",
         "propaganistas/laravel-phone": "^6.0",
         "spatie/laravel-permission": "^6.21"
     },

@@ -8,7 +8,9 @@ class GetProgressAction
 {
     public function handle(Lesson $lesson)
     {
-        // Calculate progress based on lesson completion status
-        return $lesson->progress();
+        return $lesson
+            ->progress()
+            ->where("user_id", auth("sanctum")->id())
+            ->first();
     }
 }

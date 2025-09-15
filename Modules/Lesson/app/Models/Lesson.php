@@ -22,18 +22,19 @@ class Lesson extends Model
         "description",
         "order",
         "attachment_url",
-        "attachment_name",
         "video_url",
-        "video_name",
         "course_id",
         "is_published",
-        "duration",
+        "video_proccessed",
+        "video_size",
+        "video_duration",
         "slug",
     ];
 
     protected $casts = [
         "order" => "integer",
         "is_published" => "boolean",
+        "video_proccessed" => "boolean",
         "duration" => "integer",
         "created_at" => "datetime",
         "updated_at" => "datetime",

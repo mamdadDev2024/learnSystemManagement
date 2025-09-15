@@ -19,11 +19,12 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->unsignedInteger('order')->default(0);
             $table->text('attachment_url')->nullable();
-            $table->string('attachment_name')->nullable();
             $table->text('video_url')->nullable();
-            $table->string('video_name')->nullable();
-            $table->unsignedInteger('duration')->nullable()->comment('duration in minutes');
+            $table->unsignedInteger('video_duration')->nullable()->comment('duration in minutes');
             $table->boolean('is_published')->default(false);
+            $table->text('processing_error')->nullable();
+            $table->boolean('video_proccessed')->default(false);
+            $table->integer('video_size')->nullable();
             $table->foreignIdFor(Course::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
             $table->index(['course_id', 'order']);

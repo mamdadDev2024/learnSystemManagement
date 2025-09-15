@@ -25,12 +25,10 @@ class ImportProgressRequest extends ApiFormRequest
     {
         return [
             "percentage" => "required|numeric|min:0|max:100",
-            "started_at" => "required|date|before_or_equal:now",
+            "started_at" => "nullalbe|date|before_or_equal:now",
             "completed_at" =>
                 "nullable|date|after_or_equal:started_at|before_or_equal:now",
             "time_spent" => "nullable|integer|min:0",
-            "status" => "nullable|in:in_progress,completed,not_started",
-            "notes" => "nullable|string|max:500",
         ];
     }
 

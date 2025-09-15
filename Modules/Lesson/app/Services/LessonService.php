@@ -3,6 +3,7 @@
 namespace Modules\Lesson\Services;
 
 use App\Contracts\BaseService;
+use Illuminate\Support\Facades\Log;
 use Modules\Course\Models\Course;
 use Modules\Lesson\Actions\CreateLessonAction;
 use Modules\Lesson\Actions\DeleteLessonAction;
@@ -11,6 +12,7 @@ use Modules\Lesson\Actions\ImportProgressAction;
 use Modules\Lesson\Actions\IndexLessonAction;
 use Modules\Lesson\Actions\ShowLessonAction;
 use Modules\Lesson\Actions\UpdateLessonAction;
+use Modules\Lesson\Events\VideoUploaded;
 use Modules\Lesson\Models\Lesson;
 
 class LessonService extends BaseService
@@ -45,7 +47,9 @@ class LessonService extends BaseService
     public function create(Course $course, array $data)
     {
         return $this->execute(
-            fn() => $this->createAction->handle($course, $data),
+            function() use($course , $data) { 
+                VideoUploaded::dispatch($this->createAction->handle($course, $data));
+            }, successMessage: 'Lesson Created Successfully and Stood in Queue!'
         );
     }
 

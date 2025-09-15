@@ -2,6 +2,7 @@
 
 namespace Modules\Lesson\Actions;
 
+use Illuminate\Support\Facades\Log;
 use Modules\Course\Models\Course;
 use Modules\Lesson\Events\AttachmentUploaded;
 use Modules\Lesson\Events\VideoUploaded;
@@ -11,6 +12,7 @@ class CreateLessonAction
 {
     public function handle(Course $course, array $data): mixed
     {
+        Log::error('on createAction');
         if (!isset($data["order"])) {
             $data["order"] = $this->getNextOrder($course);
         }

@@ -21,7 +21,8 @@ class ImportProgressAction
             ],
             [
                 "percentage" => $data["percentage"],
-                "started_at" => $data["started_at"],
+                "started_at" =>
+                    $data["started_at"] ?? $lesson->progress()->started_at,
                 "completed_at" => $data["completed_at"] ?? null,
                 "time_spent" => $data["time_spent"] ?? 0,
                 "status" => $this->determineStatus(
