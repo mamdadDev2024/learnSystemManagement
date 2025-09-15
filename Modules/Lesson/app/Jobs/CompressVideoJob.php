@@ -20,49 +20,76 @@ class CompressVideoJob implements ShouldQueue
     public $lesson;
     public $timeout = 3600;
     public $tries = 3;
-    public $queue = 'video';
-    
+
     public function __construct(Lesson $lesson)
     {
         $this->lesson = $lesson;
+        $this->onQueue("video");
     }
 
     public function handle()
     {
-        Log::error('on compress job');
+        Log::info("Starting video compression for lesson: {$this->lesson->id}");
+
         try {
-            if (!Storage::exists($this->lesson->video_path)) {
-                throw new \Exception("Resized video not found");
+            // Check if video_url is null or empty
+            if (empty($this->lesson->video_url)) {
+                throw new \Exception("Video URL is empty or null");
             }
 
-            $resizedPath = $this->lesson->video_path;
-            $filename = pathinfo($resizedPath, PATHINFO_FILENAME);
+            $videoPath = $this->lesson->video_url;
+
+            // Additional validation to ensure it's a string
+            if (!is_string($videoPath)) {
+                throw new \Exception("Video URL is not a valid string");
+            }
+
+            // Check if the file actually exists
+            if (!Storage::disk("public")->exists($videoPath)) {
+                throw new \Exception(
+                    "Resized video not found at path: " .
+                        ($videoPath ?? "NULL"),
+                );
+            }
+
+            $filename = pathinfo($videoPath, PATHINFO_FILENAME);
             $compressedPath = "lessons/videos/compressed/{$filename}.mp4";
 
-            $format = new X264('aac');
+            $format = new X264("aac");
             $format->setKiloBitrate(800);
-            $format->setAdditionalParameters(['-crf', '28']);
+            $format->setAdditionalParameters(["-crf", "28"]);
 
-            FFmpeg::fromDisk('local')
-                ->open($resizedPath)
+            FFmpeg::fromDisk("public")
+                ->open($videoPath)
                 ->export()
-                ->toDisk('local')
+                ->toDisk("public")
                 ->inFormat($format)
                 ->save($compressedPath);
 
+            // Verify the compressed file was created
+            if (!Storage::disk("public")->exists($compressedPath)) {
+                throw new \Exception(
+                    "Compressed video was not created successfully",
+                );
+            }
+
             $this->lesson->update([
-                'video_path' => $compressedPath,
-                'video_compressed' => true,
-                'original_video_size' => Storage::size($resizedPath),
-                'compressed_video_size' => Storage::size($compressedPath),
+                "video_url" => $compressedPath,
+                "video_compressed" => true,
+                "video_size" => Storage::disk("public")->size($compressedPath),
             ]);
 
-            Storage::delete($resizedPath);
+            // Only delete the original if compression succeeded
+            Storage::disk("public")->delete($videoPath);
 
-            Log::info("Video compressed successfully for lesson: {$this->lesson->id}");
-
+            Log::info(
+                "Video compressed successfully for lesson: {$this->lesson->id}",
+            );
         } catch (\Exception $e) {
-            Log::error("CompressVideoJob failed: " . $e->getMessage());
+            Log::error(
+                "CompressVideoJob failed for lesson {$this->lesson->id}: " .
+                    $e->getMessage(),
+            );
             $this->fail($e);
         }
     }
@@ -70,8 +97,9 @@ class CompressVideoJob implements ShouldQueue
     public function failed(\Throwable $exception)
     {
         $this->lesson->update([
-            'processing_error' => 'Compression failed: ' . $exception->getMessage(),
-            'video_processed' => false,
+            "processing_error" =>
+                "Compression failed: " . $exception->getMessage(),
+            "video_processed" => false,
         ]);
     }
 }
